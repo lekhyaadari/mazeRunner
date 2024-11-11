@@ -15,6 +15,7 @@ void initGame() {
     initDylan();
     initGriever();
     initHearts();
+    initLetters();
 }
 
 void initDylan() {
@@ -136,5 +137,17 @@ void initHearts() {
             heart[i].hide = 0;
             heart[i].oamIndex = j;
             j++;
+    }
+}
+
+void initLetters() {
+    int j = 126;
+    for (int i = j; i < (j+22); i++) {
+        letters[i].width = 16;
+        letters[i].height = 16;
+        letters[i].active = 0;
+        letters[i].hide = 1;
+        letters[i].oamIndex = j;
+        j++;
     }
 }

@@ -167,3 +167,7 @@ void updateHearts() {
         }
     }
 }
+
+void updateLetters() {
+    
+}

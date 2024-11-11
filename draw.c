@@ -9,6 +9,7 @@ void drawGame() {
     drawDylan();
     drawGriever();
     drawHearts();
+    drawLetters();
 }
 
 void drawDylan() {
@@ -76,4 +77,8 @@ void drawHearts() {
             shadowOAM[heart[i].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(0, 12);
         }
     }
+}
+
+void drawLetters() {
+    
 }

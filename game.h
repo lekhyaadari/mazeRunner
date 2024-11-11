@@ -12,6 +12,7 @@ int vOff;
 SPRITE dylan;
 SPRITE griever[10];
 SPRITE heart[3];
+SPRITE letters[26];
 typedef enum {UP, DOWN, RIGHT, LEFT} DIRECTION;
 
 int insideMaze;
@@ -32,4 +33,6 @@ void drawGriever();
 void initHearts();
 void updateHearts();
 void drawHearts();
-
+void initLetters();
+void updateLetters();
+void drawLetters();
