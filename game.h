@@ -16,7 +16,8 @@ SPRITE letters[26];
 SPRITE spear;
 typedef enum {UP, DOWN, RIGHT, LEFT} DIRECTION;
 
-int insideMaze;
+int grieverInsideMaze;
+int spearInsideMaze;
 int winGame;
 int loseGame;
 int heartActive;
@@ -36,6 +37,7 @@ void updateSpear();
 void drawSpear();
 void initHearts();
 void updateHearts();
+void launchSpears();
 void drawHearts();
 void initLetters();
 void updateLetters();

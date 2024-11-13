@@ -9,7 +9,8 @@ void initGame() {
     hideSprites();
     hOff = 0;
     vOff = 0;
-    insideMaze = 0;
+    grieverInsideMaze = 1;
+    spearInsideMaze = 1;
     loseGame = 0;
     winGame = 0;
     heartActive = 0;
@@ -121,11 +122,14 @@ void initNewGriever() {
 void initSpear() {
     spear.x = dylan.x;
     spear.y = dylan.y;
-    spear.xVel = 1;
-    spear.yVel = 1;
+    spear.xVel = 0;
+    spear.yVel = 0;
     spear.direction = dylan.direction;
     spear.active = 0;
     spear.hide = 1;
+    spear.oamIndex = 19;
+    spear.width = 8;
+    spear.height = 8;
 }
 
 void initHearts() {

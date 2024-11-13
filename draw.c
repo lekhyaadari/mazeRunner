@@ -69,10 +69,13 @@ void drawGriever() {
 }
 
 void drawSpear() {
-    if (spear.hide && !spear.active) {
-        shadowOAM[spear.oamIndex].attr0 |= ATTR0_HIDE;
-    } else {
-    }
+    // if (spear.hide) {
+    //     shadowOAM[spear.oamIndex].attr0 |= ATTR0_HIDE;
+    // } else {
+        shadowOAM[spear.oamIndex].attr0 = ATTR0_Y(spear.y - vOff) | ATTR0_4BPP | ATTR0_REGULAR | ATTR0_SQUARE;
+        shadowOAM[spear.oamIndex].attr1 = ATTR1_X(spear.x - hOff) | ATTR1_TINY;
+        shadowOAM[spear.oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(0, 12);
+    // }
 }
 
 void drawHearts() {

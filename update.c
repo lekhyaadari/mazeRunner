@@ -98,15 +98,15 @@ void updateGriever() {
         int bottomY = griever[i].y + griever[i].height - 1;
 
         if ((colorAt(rightX, topY) == 1) && (colorAt(rightX, bottomY) == 1) && (colorAt(leftX, topY) == 1) && (colorAt(leftX, bottomY) == 1)) {
-            insideMaze = 1;
+            grieverInsideMaze = 1;
         } else { 
-            insideMaze = 0;
+            grieverInsideMaze = 0;
         }
 
         if (griever[i].active) {
             griever[i].isAnimating = 0;
 
-            if (insideMaze) {
+            if (grieverInsideMaze) {
                 griever[i].isAnimating = 1;
                 if (griever[i].x < dylan.x) {
                     griever[i].x += griever[i].xVel;
@@ -114,8 +114,8 @@ void updateGriever() {
                 } else if (griever[i].x > dylan.x) {
                     griever[i].x -= griever[i].xVel;
                     griever[i].direction = LEFT;
-                    //TODO IS THIS AN ISSUE
-                } else if (griever[i].y < dylan.y) {
+                } 
+                if (griever[i].y < dylan.y) {
                     griever[i].y += griever[i].yVel;
                     griever[i].direction = DOWN;
                 } else if (griever[i].y > dylan.y) {
@@ -154,23 +154,59 @@ void updateGriever() {
             dylan.hide = 1;
             loseGame = 1;
         }
+
+        if (collision(spear.x, spear.y, spear.width, spear.height, griever[i].x, griever[i].y, griever[i].width, griever[i].height)) {
+            spear.hide = 1;
+            spear.x = dylan.x;
+            spear.y = dylan.y;
+            spear.xVel = 0;
+            spear.yVel = 0;
+        }
     }
 }
 
 void updateSpear() {
+    int leftX = spear.x;
+    int rightX = spear.x + spear.width - 1;
+    int topY = spear.y;
+    int bottomY = spear.y + spear.height - 1;
+
+    if ((colorAt(rightX - 1, topY + 1) == 1) && (colorAt(rightX - 1, bottomY - 1) == 1) && (colorAt(leftX + 1, topY + 1) == 1) && (colorAt(leftX + 1, bottomY - 1) == 1)) {
+        spearInsideMaze = 1;
+    } else { 
+        spearInsideMaze = 0;
+    }
+
     spear.direction == dylan.direction;
+    spear.x = dylan.x + 4;
+    spear.y = dylan.y + 4;
     if (BUTTON_PRESSED(BUTTON_A)) {
-        if (spear.hide == 1) {
-            spear.hide == 0;
-            if (spear.direction == RIGHT) {
+        launchSpear();
+    }
 
-            } else if (spear.direction == DOWN) {
+    if (!spearInsideMaze) {
+        spear.hide = 1;
+        spear.x = dylan.x;
+        spear.y = dylan.y;
+        spear.xVel = 0;
+        spear.yVel = 0;
+    }
+}
 
-            } else if (spear.direction == LEFT) {
-
-            } else if (spear.direction == UP) {
-                
-            }
+void launchSpear() {
+    spear.xVel = 1;
+    spear.yVel = 1;
+    if (spear.hide == 1) {
+        spear.hide = 0;
+        if (spear.direction == RIGHT) {
+            spear.x += spear.xVel;
+        } else if (spear.direction == LEFT) {
+            spear.x -= spear.xVel;
+        }
+        if (spear.direction == DOWN) {
+            spear.y += spear.yVel;
+        } else if (spear.direction == UP) {
+            spear.y -= spear.yVel;
         }
     }
 }
