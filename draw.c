@@ -6,6 +6,7 @@
 #include "mazeOneCollision.h"
 
 void drawGame() {
+    hideSprites();
     drawDylan();
     drawGriever();
     drawHearts();
@@ -48,7 +49,7 @@ void drawDylan() {
 }
 
 void drawGriever() {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 3; i++) {
         if (griever[i].active && !griever[i].erased && !griever[i].hide) {
             shadowOAM[griever[i].oamIndex].attr0 = ATTR0_Y(griever[i].y - vOff) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
             shadowOAM[griever[i].oamIndex].attr1 = ATTR1_X(griever[i].x - hOff) | ATTR1_SMALL;
@@ -67,9 +68,16 @@ void drawGriever() {
     }
 }
 
+void drawSpear() {
+    if (spear.hide && !spear.active) {
+        shadowOAM[spear.oamIndex].attr0 |= ATTR0_HIDE;
+    } else {
+    }
+}
+
 void drawHearts() {
     for (int i = 0; i < 3; i++) {
-        if (heart[i].hide && !heart[i].active) {
+        if (heart[i].hide || !heart[i].active) {
             shadowOAM[heart[i].oamIndex].attr0 |= ATTR0_HIDE;
         } else {
             shadowOAM[heart[i].oamIndex].attr0 = ATTR0_Y(heart[i].y - vOff) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
@@ -80,5 +88,7 @@ void drawHearts() {
 }
 
 void drawLetters() {
-    
+    shadowOAM[letters[19].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_TALL;
+    shadowOAM[letters[19].oamIndex].attr1 = ATTR1_X(2) | ATTR1_TINY;
+    shadowOAM[letters[19].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(27, 0);
 }

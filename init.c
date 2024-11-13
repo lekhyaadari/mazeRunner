@@ -6,6 +6,7 @@
 #include "mazeOneCollision.h"
 
 void initGame() {
+    hideSprites();
     hOff = 0;
     vOff = 0;
     insideMaze = 0;
@@ -117,6 +118,16 @@ void initNewGriever() {
     }
 }
 
+void initSpear() {
+    spear.x = dylan.x;
+    spear.y = dylan.y;
+    spear.xVel = 1;
+    spear.yVel = 1;
+    spear.direction = dylan.direction;
+    spear.active = 0;
+    spear.hide = 1;
+}
+
 void initHearts() {
     int j = 11;
     for (int i = 0; i < 3; i++) {
@@ -141,13 +152,23 @@ void initHearts() {
 }
 
 void initLetters() {
-    int j = 126;
-    for (int i = j; i < (j+22); i++) {
-        letters[i].width = 16;
-        letters[i].height = 16;
-        letters[i].active = 0;
-        letters[i].hide = 1;
-        letters[i].oamIndex = j;
-        j++;
-    }
+    // Letter T
+    letters[19].width = 8;
+    letters[19].height = 16;
+    letters[19].active = 0;
+    letters[19].active = 1;
+    letters[19].hide = 0;
+    letters[19].oamIndex = 20;
+
+    // Letter I
+
+    // Letter M
+
+    // Letter E
+
+    // Letter R
+
+    // SYMBOL :
+
+    // NUMBERS
 }

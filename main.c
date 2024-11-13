@@ -109,7 +109,6 @@ void goToStart() {
     DMANow(3, &startScreenMap, &SCREENBLOCK[8], startScreenMapLen/2);
     DMANow(3, &startScreenPal, BG_PALETTE, startScreenPalLen/2);
 
-    hideSprites();
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
@@ -142,6 +141,7 @@ void game() {
     REG_BG1HOFF = hOff;
     REG_BG1VOFF = vOff;
 
+    // hideSprites();
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 

@@ -97,7 +97,7 @@ void updateGriever() {
         int topY = griever[i].y;
         int bottomY = griever[i].y + griever[i].height - 1;
 
-        if ((colorAt(rightX - 1, topY + 1) == 1) && (colorAt(rightX - 1, bottomY - 1) == 1) && (colorAt(leftX + 1, topY + 1) == 1) && (colorAt(leftX + 1, bottomY - 1) == 1)) {
+        if ((colorAt(rightX, topY) == 1) && (colorAt(rightX, bottomY) == 1) && (colorAt(leftX, topY) == 1) && (colorAt(leftX, bottomY) == 1)) {
             insideMaze = 1;
         } else { 
             insideMaze = 0;
@@ -114,8 +114,8 @@ void updateGriever() {
                 } else if (griever[i].x > dylan.x) {
                     griever[i].x -= griever[i].xVel;
                     griever[i].direction = LEFT;
-                }
-                if (griever[i].y < dylan.y) {
+                    //TODO IS THIS AN ISSUE
+                } else if (griever[i].y < dylan.y) {
                     griever[i].y += griever[i].yVel;
                     griever[i].direction = DOWN;
                 } else if (griever[i].y > dylan.y) {
@@ -157,6 +157,24 @@ void updateGriever() {
     }
 }
 
+void updateSpear() {
+    spear.direction == dylan.direction;
+    if (BUTTON_PRESSED(BUTTON_A)) {
+        if (spear.hide == 1) {
+            spear.hide == 0;
+            if (spear.direction == RIGHT) {
+
+            } else if (spear.direction == DOWN) {
+
+            } else if (spear.direction == LEFT) {
+
+            } else if (spear.direction == UP) {
+                
+            }
+        }
+    }
+}
+
 void updateHearts() {
     for (int i = 0; i < 3; i++) {
         if (collision(dylan.x, dylan.y, dylan.width, dylan.height, heart[i].x, heart[i].y, heart[i].width, heart[i].height)) {
@@ -169,5 +187,5 @@ void updateHearts() {
 }
 
 void updateLetters() {
-    
+
 }
