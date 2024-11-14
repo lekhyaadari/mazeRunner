@@ -9,6 +9,7 @@
 #include "pauseScreen.h"
 #include "game.h"
 #include "spritesheet.h"
+#include "ViewMapOne.h"
 
 void initialize();
 
@@ -19,6 +20,7 @@ enum {
     INSTRUCTIONS,
     PAUSE,
     GAME,
+    VIEW,
     WIN,
     LOSE
 } state;
@@ -29,6 +31,8 @@ void instructions();
 void goToInstructions();
 void game();
 void goToGame();
+void viewMap();
+void goToViewMap();
 void pause();
 void goToPause();
 void win();
@@ -69,6 +73,9 @@ int main() {
             case GAME:
                 game();
                 break;
+            case VIEW:
+                viewMap();
+                break;
             case WIN:
                 win();
                 break;
@@ -84,7 +91,8 @@ void initialize() {
 
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
     REG_BG0CNT = BG_CHARBLOCK(0) | BG_SCREENBLOCK(8) | BG_SIZE_SMALL | BG_4BPP;
-    REG_BG1CNT = BG_CHARBLOCK(2) | BG_SCREENBLOCK(24) | BG_SIZE_LARGE | BG_4BPP;
+    REG_BG1CNT = BG_CHARBLOCK(2) | BG_SCREENBLOCK(10) | BG_SIZE_LARGE | BG_4BPP;
+    REG_BG2CNT = BG_CHARBLOCK(3) | BG_SCREENBLOCK(14) | BG_SIZE_SMALL | BG_4BPP;
 
     // REG_BG0HOFF = hOff;
     // REG_BG0VOFF = vOff;
@@ -149,6 +157,10 @@ void game() {
         goToPause();
     }
 
+    if (BUTTON_PRESSED(BUTTON_B)) {
+        goToViewMap(0);
+    }
+
     if (winGame == 1) {
         goToWin();
     }
@@ -160,7 +172,7 @@ void game() {
 void goToGame() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(1) | SPRITE_ENABLE;
     DMANow(3, &mazeOneTiles, &CHARBLOCK[2], mazeOneTilesLen/2);
-    DMANow(3, &mazeOneMap, &SCREENBLOCK[24], mazeOneMapLen/2);
+    DMANow(3, &mazeOneMap, &SCREENBLOCK[10], mazeOneMapLen/2);
     DMANow(3, &mazeOnePal, BG_PALETTE, mazeOnePalLen/2);
 
     DMANow(3, spritesheetTiles, &CHARBLOCK[4], spritesheetTilesLen/2);
@@ -172,6 +184,26 @@ void goToGame() {
 
     initGame();
     state = GAME;
+}
+
+void viewMap() {
+    waitForVBlank();
+
+    if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
+        goToGame();
+    }
+}
+void goToViewMap() {
+    REG_DISPCTL = MODE(0) | BG_ENABLE(2);
+    DMANow(3, &ViewMapOneTiles, &CHARBLOCK[3], ViewMapOneTilesLen/2);
+    DMANow(3, &ViewMapOneMap, &SCREENBLOCK[14], ViewMapOneMapLen/2);
+    DMANow(3, &ViewMapOnePal, BG_PALETTE, ViewMapOnePalLen/2);
+
+    hideSprites();
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    state = VIEW;
 }
 
 void pause() {

@@ -68,6 +68,8 @@ void drawGriever() {
     }
 }
 
+//!collision(sprite.x, y, width, height, hoff, voff, screenwi, screenhe)
+
 void drawSpear() {
     // if (spear.hide) {
     //     shadowOAM[spear.oamIndex].attr0 |= ATTR0_HIDE;
