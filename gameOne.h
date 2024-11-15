@@ -21,6 +21,7 @@ int spearInsideMaze;
 int winGame;
 int loseGame;
 int heartActive;
+int launchSpearBool;
 
 void initGame();
 void updateGame();

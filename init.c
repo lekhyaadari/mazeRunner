@@ -1,6 +1,6 @@
 #include "gba.h"
 #include "sprites.h"
-#include "game.h"
+#include "gameOne.h"
 #include "mode0.h"
 #include "spritesheet.h"
 #include "mazeOneCollision.h"
@@ -16,6 +16,7 @@ void initGame() {
     heartActive = 0;
     initDylan();
     initGriever();
+    initSpear();
     initHearts();
     initLetters();
 }
@@ -75,7 +76,7 @@ void initGriever() {
 
     //griever 3
     griever[2].x = 480;
-    griever[2].y = 455;
+    griever[2].y = 255;
     griever[2].xVel = 1;
     griever[2].yVel = 1;
     griever[2].width = 16;
@@ -90,8 +91,13 @@ void initGriever() {
     griever[2].hide = 0;
     griever[2].oamIndex = 3;
 
+    int j = 4;
     for (int i = 3; i < 10; i++) {
         griever[i].active = 0;
+        griever[i].hide = 1;
+        griever[i].erased = 1;
+        griever[i].oamIndex = j;
+        j++;
     }
 }
 
@@ -100,7 +106,7 @@ void initNewGriever() {
     for (int i = 3; i < 10; i++) {
         if (!griever[i].active) {
             griever[i].x = rand() % (MAPTWOWIDTH - 16);
-            griever[i].y = rand() % (MAPTWOHEIGHT - 16);
+            griever[i].y = rand() % ((MAPTWOHEIGHT - 16)/2);
             griever[i].xVel = 1;
             griever[i].yVel = 1;
             griever[i].width = 16;
@@ -130,14 +136,15 @@ void initSpear() {
     spear.oamIndex = 19;
     spear.width = 8;
     spear.height = 8;
+    launchSpearBool = 0;
 }
 
 void initHearts() {
     int j = 11;
     for (int i = 0; i < 3; i++) {
             heart[i].x = rand() % (MAPTWOWIDTH - 8);
-            heart[i].y = rand() % (MAPTWOHEIGHT - 8);
-            // TODO: add if checks for if hearts generate in a bush
+            heart[i].y = rand() % ((MAPTWOHEIGHT - 8)/2);
+            // TODO: add if checks for if hearts generate in a bush +  move them accordingly
             heart[i].xVel = 0;
             heart[i].yVel = 0;
             heart[i].width = 8;
@@ -164,6 +171,7 @@ void initLetters() {
     letters[19].hide = 0;
     letters[19].oamIndex = 20;
 
+    // TODO finish initializing letters
     // Letter I
 
     // Letter M

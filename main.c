@@ -1,26 +1,34 @@
+//Part of Scaffold
 #include "gba.h"
 #include "mode0.h"
 #include "sprites.h"
 #include "print.h"
-//state backgrounds
+//State Screen Maps and Spritesheet
 #include "startScreen.h"
 #include "instructScreen.h"
-#include "mazeOne.h"
 #include "pauseScreen.h"
-#include "game.h"
 #include "spritesheet.h"
+//Maze One Maps
+#include "mazeOne.h"
 #include "ViewMapOne.h"
+//Maze Two Maps
+
+//Maze Three Maps
+
+//Game One (maze one) Header File
+#include "gameOne.h"
 
 void initialize();
 
 OBJ_ATTR shadowOAM[128];
 
+//State Enum
 enum {
     START,
     INSTRUCTIONS,
     PAUSE,
-    GAME,
-    VIEW,
+    GAMEONE,
+    VIEWONE,
     WIN,
     LOSE
 } state;
@@ -29,10 +37,10 @@ void start();
 void goToStart();
 void instructions();
 void goToInstructions();
-void game();
-void goToGame();
-void viewMap();
-void goToViewMap();
+void gameOne();
+void goToGameOne();
+void viewMapOne();
+void goToViewMapOne();
 void pause();
 void goToPause();
 void win();
@@ -70,11 +78,11 @@ int main() {
             case INSTRUCTIONS:
                 instructions();
                 break;
-            case GAME:
-                game();
+            case GAMEONE:
+                gameOne();
                 break;
-            case VIEW:
-                viewMap();
+            case VIEWONE:
+                viewMapOne();
                 break;
             case WIN:
                 win();
@@ -107,7 +115,7 @@ void start() {
         goToInstructions();
     }
     if (BUTTON_PRESSED(BUTTON_START)) {
-        goToGame();
+        goToGameOne();
     }
     
 }
@@ -127,7 +135,7 @@ void instructions() {
     waitForVBlank();
 
     if (BUTTON_PRESSED(BUTTON_START)) {
-        goToGame();
+        goToGameOne();
     }
 }
 void goToInstructions() {
@@ -143,7 +151,7 @@ void goToInstructions() {
     state = INSTRUCTIONS;
 }
 
-void game() {
+void gameOne() {
     updateGame();
     drawGame();
     REG_BG1HOFF = hOff;
@@ -157,8 +165,9 @@ void game() {
         goToPause();
     }
 
+    //TODO add timer for this
     if (BUTTON_PRESSED(BUTTON_B)) {
-        goToViewMap(0);
+        goToViewMapOne();
     }
 
     if (winGame == 1) {
@@ -169,7 +178,7 @@ void game() {
     }
 
 }
-void goToGame() {
+void goToGameOne() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(1) | SPRITE_ENABLE;
     DMANow(3, &mazeOneTiles, &CHARBLOCK[2], mazeOneTilesLen/2);
     DMANow(3, &mazeOneMap, &SCREENBLOCK[10], mazeOneMapLen/2);
@@ -183,17 +192,17 @@ void goToGame() {
     DMANow(3, shadowOAM, OAM, 128*4);
 
     initGame();
-    state = GAME;
+    state = GAMEONE;
 }
 
-void viewMap() {
+void viewMapOne() {
     waitForVBlank();
 
     if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
-        goToGame();
+        goToGameOne();
     }
 }
-void goToViewMap() {
+void goToViewMapOne() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(2);
     DMANow(3, &ViewMapOneTiles, &CHARBLOCK[3], ViewMapOneTilesLen/2);
     DMANow(3, &ViewMapOneMap, &SCREENBLOCK[14], ViewMapOneMapLen/2);
@@ -203,14 +212,14 @@ void goToViewMap() {
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
-    state = VIEW;
+    state = VIEWONE;
 }
 
 void pause() {
     waitForVBlank();
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
-        goToGame();
+        goToGameOne();
     }
     if (BUTTON_PRESSED(BUTTON_START)) {
         goToStart();
@@ -247,6 +256,7 @@ void goToWin() {
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
+    winGame = 0;
     state = WIN;
 }
 
@@ -267,5 +277,6 @@ void goToLose() {
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
+    loseGame = 0;
     state = LOSE;
 }

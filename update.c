@@ -1,6 +1,6 @@
 #include "gba.h"
 #include "sprites.h"
-#include "game.h"
+#include "gameOne.h"
 #include "mode0.h"
 #include "spritesheet.h"
 #include "mazeOneCollision.h"
@@ -13,6 +13,7 @@ inline unsigned char colorAt(int x, int y){
 void updateGame() {
     updateDylan();
     updateGriever();
+    updateSpear();
     updateHearts();
 }
 
@@ -26,28 +27,28 @@ void updateDylan() {
 
     if (BUTTON_HELD(BUTTON_RIGHT)) {
         dylan.isAnimating = 1;
-        if (colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY)) {
+        if (colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) && colorAt(rightX + dylan.xVel, topY + 4)) {
             dylan.x += dylan.xVel;
             dylan.direction = RIGHT;
         }
     }
     if (BUTTON_HELD(BUTTON_LEFT)) {
         dylan.isAnimating = 1;
-        if (colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY)) {
+        if (colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) && colorAt(leftX -  dylan.xVel, topY + 4)) {
             dylan.x -= dylan.xVel;
             dylan.direction = LEFT;
         }
     }
     if (BUTTON_HELD(BUTTON_UP)) {
         dylan.isAnimating = 1;
-        if (colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel)) {
+        if (colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) && colorAt(rightX - 4, topY  - dylan.yVel)) {
             dylan.y -= dylan.yVel;
             dylan.direction = UP;
         }
     }
     if (BUTTON_HELD(BUTTON_DOWN)) {
         dylan.isAnimating = 1;
-        if (colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel)) {
+        if (colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) && colorAt(rightX - 4, bottomY + dylan.yVel)) {
             dylan.y += dylan.yVel;
             dylan.direction = DOWN;
         }
@@ -136,11 +137,16 @@ void updateGriever() {
             }
         }
 
+        // TODO add timer for this
         if (heartActive) {
             if (BUTTON_PRESSED(BUTTON_RSHOULDER)) {
+                griever[i].x = 0;
+                griever[i].y = 0;
                 griever[i].active = 0;
                 griever[i].erased = 1;
                 griever[i].hide = 1;
+                griever[i].xVel = 0;
+                griever[i].yVel = 0;
             } else {
                 griever[i].active = 1;
                 griever[i].erased = 0;
@@ -156,59 +162,87 @@ void updateGriever() {
         }
 
         if (collision(spear.x, spear.y, spear.width, spear.height, griever[i].x, griever[i].y, griever[i].width, griever[i].height)) {
+            //return sprite
             spear.hide = 1;
             spear.x = dylan.x;
             spear.y = dylan.y;
             spear.xVel = 0;
             spear.yVel = 0;
+            launchSpearBool = 0;
+
+            //kill griever
+            griever[i].x = 0;
+            griever[i].y = 0;
+            griever[i].active = 0;
+            griever[i].erased = 1;
+            griever[i].hide = 1;
+            griever[i].xVel = 0;
+            griever[i].yVel = 0;
         }
     }
 }
 
 void updateSpear() {
-    int leftX = spear.x;
-    int rightX = spear.x + spear.width - 1;
-    int topY = spear.y;
-    int bottomY = spear.y + spear.height - 1;
+    if (!spear.hide) {
+        spear.x += spear.xVel;
+        spear.y += spear.yVel;
 
-    if ((colorAt(rightX - 1, topY + 1) == 1) && (colorAt(rightX - 1, bottomY - 1) == 1) && (colorAt(leftX + 1, topY + 1) == 1) && (colorAt(leftX + 1, bottomY - 1) == 1)) {
-        spearInsideMaze = 1;
-    } else { 
-        spearInsideMaze = 0;
-    }
+        int leftX = spear.x;
+        int rightX = spear.x + spear.width - 1;
+        int topY = spear.y;
+        int bottomY = spear.y + spear.height - 1;
 
-    spear.direction == dylan.direction;
-    spear.x = dylan.x + 4;
-    spear.y = dylan.y + 4;
+        if ((colorAt(rightX - 1, topY + 1) == 0) || (colorAt(rightX - 1, bottomY - 1) == 0) || (colorAt(leftX + 1, topY + 1) == 0) || (colorAt(leftX + 1, bottomY - 1) == 0)) {
+            spearInsideMaze = 0;
+        } else { 
+            spearInsideMaze = 1;
+        }
+
+        if (!spearInsideMaze) {
+            spear.hide = 1;
+            spear.x = dylan.x;
+            spear.y = dylan.y;
+            spear.xVel = 0;
+            spear.yVel = 0;
+            launchSpearBool = 0;
+        }
+    } 
+
+    spear.direction = dylan.direction;
+    // spear.x = dylan.x + 2;
+    // spear.y = dylan.y + 2;
     if (BUTTON_PRESSED(BUTTON_A)) {
         launchSpear();
-    }
-
-    if (!spearInsideMaze) {
-        spear.hide = 1;
-        spear.x = dylan.x;
-        spear.y = dylan.y;
-        spear.xVel = 0;
-        spear.yVel = 0;
     }
 }
 
 void launchSpear() {
-    spear.xVel = 1;
-    spear.yVel = 1;
-    if (spear.hide == 1) {
+    // spear.xVel = 1;
+    // spear.yVel = 1;
+    // if (spear.hide == 1) {
         spear.hide = 0;
+        spear.direction = dylan.direction;
+        spear.x = dylan.x + 2;
+        spear.y = dylan.y + 2;
+
         if (spear.direction == RIGHT) {
-            spear.x += spear.xVel;
+            // spear.x += spear.xVel;
+            spear.xVel = 1;
+            spear.yVel = 0;
         } else if (spear.direction == LEFT) {
-            spear.x -= spear.xVel;
-        }
-        if (spear.direction == DOWN) {
-            spear.y += spear.yVel;
+            // spear.x -= spear.xVel;
+            spear.xVel = -1;
+            spear.yVel = 0;
+        } else if (spear.direction == DOWN) {
+            // spear.y += spear.yVel;
+            spear.xVel = 0;
+            spear.yVel = 1;
         } else if (spear.direction == UP) {
-            spear.y -= spear.yVel;
+            // spear.y -= spear.yVel;
+            spear.xVel = 0;
+            spear.yVel = -1;
         }
-    }
+    // }
 }
 
 void updateHearts() {
