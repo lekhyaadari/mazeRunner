@@ -142,23 +142,23 @@ void initSpear() {
 void initHearts() {
     int j = 11;
     for (int i = 0; i < 3; i++) {
-            heart[i].x = rand() % (MAPTWOWIDTH - 8);
-            heart[i].y = rand() % ((MAPTWOHEIGHT - 8)/2);
-            // TODO: add if checks for if hearts generate in a bush +  move them accordingly
-            heart[i].xVel = 0;
-            heart[i].yVel = 0;
-            heart[i].width = 8;
-            heart[i].height = 8;
-            heart[i].timeUntilNextFrame = 6;
-            heart[i].direction = RIGHT;
-            heart[i].isAnimating = 0;
-            heart[i].currentFrame = 0;
-            heart[i].numFrames = 4;
-            heart[i].active = 1;
-            heart[i].erased = 0;
-            heart[i].hide = 0;
-            heart[i].oamIndex = j;
-            j++;
+        heart[i].x = rand() % (MAPTWOWIDTH - 8);
+        heart[i].y = rand() % ((MAPTWOHEIGHT - 8)/2);
+        // TODO: add if checks for if hearts generate in a bush +  move them accordingly
+        heart[i].xVel = 0;
+        heart[i].yVel = 0;
+        heart[i].width = 8;
+        heart[i].height = 8;
+        heart[i].timeUntilNextFrame = 6;
+        heart[i].direction = RIGHT;
+        heart[i].isAnimating = 0;
+        heart[i].currentFrame = 0;
+        heart[i].numFrames = 4;
+        heart[i].active = 1;
+        heart[i].erased = 0;
+        heart[i].hide = 0;
+        heart[i].oamIndex = j;
+        j++;
     }
 }
 

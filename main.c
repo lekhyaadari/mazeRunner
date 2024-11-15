@@ -15,6 +15,8 @@
 
 //Maze Three Maps
 
+//Cutscene Maps
+
 //Game One (maze one) Header File
 #include "gameOne.h"
 
@@ -29,10 +31,17 @@ enum {
     PAUSE,
     GAMEONE,
     VIEWONE,
+    CUTSCENEONE,
+    GAMETWO,
+    VIEWTWO,
+    CUTSCENETWO,
+    GAMETHREE,
+    VIEWTHREE,
     WIN,
     LOSE
 } state;
 
+//Function Prototypes
 void start();
 void goToStart();
 void instructions();
@@ -41,6 +50,18 @@ void gameOne();
 void goToGameOne();
 void viewMapOne();
 void goToViewMapOne();
+void cutsceneOne();
+void goToCutsceneOne();
+void gameTwo();
+void goToGameTwo();
+void viewMapTwo();
+void goToViewMapTwo();
+void cutsceneTwo();
+void goToCutsceneTwo();
+void gameThree();
+void goToGameThree();
+void viewMapThree();
+void goToViewMapThree();
 void pause();
 void goToPause();
 void win();
@@ -213,6 +234,48 @@ void goToViewMapOne() {
     DMANow(3, shadowOAM, OAM, 128*4);
 
     state = VIEWONE;
+}
+
+void cutsceneOne() {
+
+}
+void goToCutsceneOne() {
+
+}
+
+void gameTwo() {
+
+}
+void goToGameThree() {
+
+}
+
+void viewMapTwo() {
+
+}
+void goToViewMapTwo() {
+
+}
+
+void cutsceneTwo() {
+
+}
+void goToCutsceneTwo() {
+
+}
+
+void gameThree() {
+
+}
+void goToGameThree() {
+
+}
+
+void viewMapThree() {
+
+}
+void goToViewMapThree() {
+    
 }
 
 void pause() {
