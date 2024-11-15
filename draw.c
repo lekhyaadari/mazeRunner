@@ -51,9 +51,9 @@ void drawDylan() {
 
 void drawGriever() {
     for (int i = 0; i < 3; i++) {
-        if (griever[i].active && griever[i].hide && !(collision(griever[i].x, griever[i].y, griever[i].width, griever[i].height, hOff, vOff, SCREENWIDTH, SCREENHEIGHT))) {
-            shadowOAM[griever[i].oamIndex].attr0 |= ATTR0_HIDE;
-        } else if (griever[i].active && !griever[i].erased && !griever[i].hide) {
+        if (griever[i].active && griever[i].hide) {
+            shadowOAM[griever[i].oamIndex].attr0 = ATTR0_HIDE;
+        } else if (griever[i].active && !griever[i].erased && !griever[i].hide && (collision(griever[i].x, griever[i].y, griever[i].width, griever[i].height, hOff, vOff, SCREENWIDTH, SCREENHEIGHT))) {
             shadowOAM[griever[i].oamIndex].attr0 = ATTR0_Y(griever[i].y - vOff) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
             shadowOAM[griever[i].oamIndex].attr1 = ATTR1_X(griever[i].x - hOff) | ATTR1_SMALL;
             shadowOAM[griever[i].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(griever[i].currentFrame*2, 6);
@@ -85,9 +85,9 @@ void drawSpear() {
 
 void drawHearts() {
     for (int i = 0; i < 3; i++) {
-        if (heart[i].hide || !heart[i].active) {
+        if (heart[i].hide && !heart[i].active) {
             shadowOAM[heart[i].oamIndex].attr0 |= ATTR0_HIDE;
-        } else {
+        } else if (heart[i].active && !heart[i].hide && collision(heart[i].x, heart[i].y, heart[i].width, heart[i].height, hOff, vOff, SCREENWIDTH, SCREENHEIGHT)) {
             shadowOAM[heart[i].oamIndex].attr0 = ATTR0_Y(heart[i].y - vOff) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
             shadowOAM[heart[i].oamIndex].attr1 = ATTR1_X(heart[i].x - hOff) | ATTR1_TINY;
             shadowOAM[heart[i].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(0, 12);

@@ -6,7 +6,7 @@
 #include "mazeOneCollision.h"
 
 inline unsigned char colorAt(int x, int y){
-    return ((unsigned char *) mazeOneCollisionBitmap) [OFFSET(x, y, MAPTWOWIDTH)];
+    return ((unsigned char *) mazeOneCollisionBitmap) [OFFSET(x, y, 512)];
 
 }
 
@@ -25,33 +25,33 @@ void updateDylan() {
 
     dylan.isAnimating = 0;
 
-    if (BUTTON_HELD(BUTTON_RIGHT)) {
+    if (BUTTON_HELD(BUTTON_RIGHT) && colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) && (dylan.x + dylan.width < 512)) {
         dylan.isAnimating = 1;
-        if (colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) && colorAt(rightX + dylan.xVel, topY + 4)) {
+        // if (colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) ) {
             dylan.x += dylan.xVel;
             dylan.direction = RIGHT;
-        }
+        // }
     }
-    if (BUTTON_HELD(BUTTON_LEFT)) {
+    if (BUTTON_HELD(BUTTON_LEFT) && colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) && (dylan.x > 0)) {
         dylan.isAnimating = 1;
-        if (colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) && colorAt(leftX -  dylan.xVel, topY + 4)) {
+        // if (colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) ) {
             dylan.x -= dylan.xVel;
             dylan.direction = LEFT;
-        }
+        // }
     }
-    if (BUTTON_HELD(BUTTON_UP)) {
+    if (BUTTON_HELD(BUTTON_UP) && colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) && (dylan.y > 0)) {
         dylan.isAnimating = 1;
-        if (colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) && colorAt(rightX - 4, topY  - dylan.yVel)) {
+        // if (colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) ) {
             dylan.y -= dylan.yVel;
             dylan.direction = UP;
-        }
+        // }
     }
-    if (BUTTON_HELD(BUTTON_DOWN)) {
+    if (BUTTON_HELD(BUTTON_DOWN) && colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) && (dylan.y + dylan.height < 512)) {
         dylan.isAnimating = 1;
-        if (colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) && colorAt(rightX - 4, bottomY + dylan.yVel)) {
+        // if (colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) ) {
             dylan.y += dylan.yVel;
             dylan.direction = DOWN;
-        }
+        // }
     }
 
     if (dylan.isAnimating == 1) {
@@ -107,7 +107,7 @@ void updateGriever() {
         if (griever[i].active) {
             griever[i].isAnimating = 0;
 
-            if (grieverInsideMaze) {
+            // if (grieverInsideMaze) {
                 griever[i].isAnimating = 1;
                 if (griever[i].x < dylan.x) {
                     griever[i].x += griever[i].xVel;
@@ -123,7 +123,7 @@ void updateGriever() {
                     griever[i].y -= griever[i].yVel;
                     griever[i].direction = UP;
                 }
-            }
+            // }
 
             if (griever[i].isAnimating == 1) {
                 griever[i].timeUntilNextFrame--;

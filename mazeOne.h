@@ -5,11 +5,11 @@
 //
 //	mazeOne, 512x512@4, 
 //	+ palette 256 entries, not compressed
-//	+ 4 tiles (t|f|p reduced) not compressed
+//	+ 3 tiles (t|f|p reduced) not compressed
 //	+ regular map (in SBBs), not compressed, 64x64 
-//	Total size: 512 + 128 + 8192 = 8832
+//	Total size: 512 + 96 + 8192 = 8800
 //
-//	Time-stamp: 2024-11-06, 14:13:19
+//	Time-stamp: 2024-11-15, 14:04:50
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.3
 //	( http://www.coranac.com/projects/#grit )
 //
@@ -18,8 +18,8 @@
 #ifndef GRIT_MAZEONE_H
 #define GRIT_MAZEONE_H
 
-#define mazeOneTilesLen 128
-extern const unsigned short mazeOneTiles[64];
+#define mazeOneTilesLen 96
+extern const unsigned short mazeOneTiles[48];
 
 #define mazeOneMapLen 8192
 extern const unsigned short mazeOneMap[4096];

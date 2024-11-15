@@ -246,7 +246,7 @@ void goToCutsceneOne() {
 void gameTwo() {
 
 }
-void goToGameThree() {
+void goToGameTwo() {
 
 }
 
