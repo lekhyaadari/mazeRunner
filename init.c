@@ -42,7 +42,7 @@ void initDylan() {
 void initGriever() {
     //griever 1
     griever[0].x = 10;
-    griever[0].y = 80;
+    griever[0].y = 28;
     griever[0].xVel = 1;
     griever[0].yVel = 1;
     griever[0].width = 16;

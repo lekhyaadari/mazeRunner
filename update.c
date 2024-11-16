@@ -92,7 +92,7 @@ void updateDylan() {
 }
 
 void updateGriever() {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 3; i++) {
         int leftX = griever[i].x;
         int rightX = griever[i].x + griever[i].width - 1;
         int topY = griever[i].y;
@@ -107,23 +107,33 @@ void updateGriever() {
         if (griever[i].active) {
             griever[i].isAnimating = 0;
 
-            // if (grieverInsideMaze) {
-                griever[i].isAnimating = 1;
-                if (griever[i].x < dylan.x) {
-                    griever[i].x += griever[i].xVel;
-                    griever[i].direction = RIGHT;
-                } else if (griever[i].x > dylan.x) {
-                    griever[i].x -= griever[i].xVel;
-                    griever[i].direction = LEFT;
-                } 
-                if (griever[i].y < dylan.y) {
-                    griever[i].y += griever[i].yVel;
-                    griever[i].direction = DOWN;
-                } else if (griever[i].y > dylan.y) {
-                    griever[i].y -= griever[i].yVel;
-                    griever[i].direction = UP;
+            if (griever[i].direction == RIGHT) {
+                griever[i].x += griever[i].xVel;
+                if ((colorAt(rightX + 1, topY) == 0) && (colorAt(rightX + 1, bottomY) == 0)) {
+                    // griever[i].direction = LEFT;
+                    griever[i].direction = rand() % 4;
                 }
-            // }
+            } else if (griever[i].direction == LEFT) {
+                griever[i].x -= griever[i].xVel;
+                if ((colorAt(leftX - 1, topY) == 0) && (colorAt(leftX - 1, bottomY) == 0)) {
+                    // griever[i].direction = RIGHT;
+                    griever[i].direction = rand() % 4;
+                }
+            }
+            if (griever[i].direction == UP) {
+                griever[i].y -= griever[i].yVel;
+                if ((colorAt(leftX, topY - 1) == 0) && (colorAt(rightX, topY - 1) == 0)) {
+                    // griever[i].direction = RIGHT;
+                    griever[i].direction = rand() % 4;
+                }
+            } else if (griever[i].direction == DOWN) {
+                griever[i].y += griever[i].yVel;
+                if ((colorAt(leftX, bottomY + 1) == 0) && (colorAt(rightX, bottomY + 1) == 0)) {
+                    // griever[i].direction = RIGHT;
+                    griever[i].direction = rand() % 4;
+                }
+            }
+
 
             if (griever[i].isAnimating == 1) {
                 griever[i].timeUntilNextFrame--;

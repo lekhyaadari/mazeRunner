@@ -16,11 +16,17 @@
 //Maze Three Maps
 
 //Cutscene Maps
-
+#include "cutscenes.h"
+#include "cutscenesTiles.h"
 //Game One (maze one) Header File
 #include "gameOne.h"
 
 void initialize();
+
+void drawDialogue(volatile unsigned char* dialogue);
+int getTileIDForChar(char c);
+int timeUntilNextLetter = 5;
+int currentIndex = 0;
 
 OBJ_ATTR shadowOAM[128];
 
@@ -105,6 +111,24 @@ int main() {
             case VIEWONE:
                 viewMapOne();
                 break;
+            case CUTSCENEONE:
+                cutsceneOne();
+                break;
+            case GAMETWO:
+                gameTwo();
+                break;
+            case VIEWTWO:
+                viewMapTwo();
+                break;
+            case CUTSCENETWO:
+                cutsceneTwo();
+                break;
+            case GAMETHREE:
+                gameThree();
+                break;
+            case VIEWTHREE:
+                viewMapThree();
+                break;
             case WIN:
                 win();
                 break;
@@ -184,6 +208,7 @@ void gameOne() {
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
         goToPause();
+        // winGame = 1; //used for testing
     }
 
     //TODO add timer for this
@@ -192,7 +217,7 @@ void gameOne() {
     }
 
     if (winGame == 1) {
-        goToWin();
+        goToCutsceneOne();
     }
     if (loseGame == 1) {
         goToLose();
@@ -237,10 +262,35 @@ void goToViewMapOne() {
 }
 
 void cutsceneOne() {
+    waitForVBlank();
 
+    // SCREENBLOCK[14].tilemap[OFFSET(1, 1, 32)] = TILEMAP_ENTRY_TILEID(2);
+    volatile unsigned char dialogue[] = "HELLO";
+    drawDialogue(dialogue);
+
+    if (BUTTON_PRESSED(BUTTON_START)) {
+        goToGameTwo();
+    }
+
+    if (BUTTON_PRESSED(BUTTON_SELECT)) {
+        goToStart();
+    }
+
+    if (BUTTON_PRESSED(BUTTON_RSHOULDER)) {
+        goToWin(); //just used for testing, won't be part of final submission
+    }
 }
 void goToCutsceneOne() {
+    REG_DISPCTL = MODE(0) | BG_ENABLE(2);
+    DMANow(3, &cutscenesTilesTiles, &CHARBLOCK[3], cutscenesTilesTilesLen/2);
+    DMANow(3, &cutscenesMap, &SCREENBLOCK[14], cutscenesLen/2);
+    DMANow(3, &cutscenesTilesPal, BG_PALETTE, cutscenesTilesPalLen/2);
 
+    hideSprites();
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    state = CUTSCENEONE;
 }
 
 void gameTwo() {
@@ -287,7 +337,6 @@ void pause() {
     if (BUTTON_PRESSED(BUTTON_START)) {
         goToStart();
     }
-
 }
 void goToPause() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
@@ -342,4 +391,36 @@ void goToLose() {
 
     loseGame = 0;
     state = LOSE;
+}
+
+//animate dialogue / words in the cutscene using tilemap modification
+void drawDialogue(volatile unsigned char* dialogue) {
+    int frameCounter = 0;
+
+    if (timeUntilNextLetter == 0) {
+        if (dialogue[currentIndex] != '\0') {
+            int x = currentIndex % 32;
+            int y = (currentIndex / 32) + 1;
+
+            int tileID = getTileIDForChar(dialogue[currentIndex]);
+
+            setTile(x, y, tileID, 14);
+
+            currentIndex++;
+        }
+        timeUntilNextLetter = 5;
+    } else {
+        timeUntilNextLetter--;
+    }
+}
+
+//Map character to tileID in cutscenes tileset
+int getTileIDForChar(char c) {
+    if (c >= 'A' && c <= 'Z') {
+        return c - 'A' + 1;
+    } else if (c == ' ') {
+        return 0;
+    } else {
+        return 0;
+    }
 }
