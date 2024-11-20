@@ -1,4 +1,4 @@
-// #include "sprites.h"
+#include "sprites.h"
 #define MAPONEWIDTH 256
 #define MAPONEHEIGHT 256
 #define SCREENWIDTH 240
@@ -23,6 +23,7 @@ int loseGame;
 int heartActive;
 int launchSpearBool;
 
+//Game One
 void initGame();
 void updateGame();
 void drawGame();
@@ -43,6 +44,31 @@ void drawHearts();
 void initLetters();
 void updateLetters();
 void drawLetters();
+
+//Game Two
+void initGameTwo();
+void initDylanTwo();
+void initGrieversTwo();
+void initHeartsTwo();
+void initLettersTwo();
+void updateGameTwo();
+void updateDylanTwo();
+void updateGrieversTwo();
+void updateHeartsTwo();
+void updateLettersTwo();
+void launchSpearTwo();
+
+//Game Three Inits
+void initGameThree();
+void initDylanThree();
+void initGrieversThree();
+void initHeartsThree();
+void initLettersThree();
+void updateGameThree();
+void updateDylanThree();
+void updateGrieversThree();
+void updateHeartsThree();
+void updateLettersThree();
 
 // Letters
 // A - 0, B - 1, C - 2, D - 3, E - 4, F - 5, G - 6, H - 7, I - 8, J - 9, K - 10

@@ -1,6 +1,6 @@
 #include "gba.h"
 #include "sprites.h"
-#include "gameOne.h"
+#include "game.h"
 #include "mode0.h"
 #include "spritesheet.h"
 #include "mazeOneCollision.h"

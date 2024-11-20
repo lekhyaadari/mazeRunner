@@ -9,17 +9,18 @@
 #include "pauseScreen.h"
 #include "spritesheet.h"
 //Maze One Maps
+#include "mazeBackground.h"
 #include "mazeOne.h"
 #include "ViewMapOne.h"
 //Maze Two Maps
-
+#include "mazeTwo.h"
 //Maze Three Maps
-
+#include "mazeThree.h"
 //Cutscene Maps
 #include "cutscenes.h"
 #include "cutscenesTiles.h"
 //Game One (maze one) Header File
-#include "gameOne.h"
+#include "game.h"
 
 void initialize();
 
@@ -207,8 +208,8 @@ void gameOne() {
     DMANow(3, shadowOAM, OAM, 128*4);
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
-        goToPause();
-        // winGame = 1; //used for testing
+        // goToPause();
+        winGame = 1; //used for testing
     }
 
     //TODO add timer for this
@@ -226,9 +227,9 @@ void gameOne() {
 }
 void goToGameOne() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(1) | SPRITE_ENABLE;
-    DMANow(3, &mazeOneTiles, &CHARBLOCK[2], mazeOneTilesLen/2);
-    DMANow(3, &mazeOneMap, &SCREENBLOCK[10], mazeOneMapLen/2);
-    DMANow(3, &mazeOnePal, BG_PALETTE, mazeOnePalLen/2);
+    DMANow(3, &mazeBackgroundTiles, &CHARBLOCK[2], mazeBackgroundTilesLen/2);
+    DMANow(3, &mazeOneMap, &SCREENBLOCK[10], mazeOneLen/2);
+    DMANow(3, &mazeBackgroundPal, BG_PALETTE, mazeBackgroundPalLen/2);
 
     DMANow(3, spritesheetTiles, &CHARBLOCK[4], spritesheetTilesLen/2);
     DMANow(3, spritesheetPal, SPRITE_PAL, spritesheetPalLen/2);
@@ -290,14 +291,56 @@ void goToCutsceneOne() {
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
+    winGame = 0;
+    loseGame = 0;
+    heartActive = 0;
+
     state = CUTSCENEONE;
 }
 
 void gameTwo() {
+    updateGameTwo();
+    drawGame();
+    REG_BG1HOFF = hOff;
+    REG_BG1VOFF = vOff;
+
+    // hideSprites();
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    if (BUTTON_PRESSED(BUTTON_SELECT)) {
+        goToPause();
+        // winGame = 1; //used for testing
+    }
+
+    //TODO add timer for this
+    if (BUTTON_PRESSED(BUTTON_B)) {
+        goToViewMapTwo();
+    }
+
+    if (winGame == 1) {
+        goToCutsceneTwo();
+    }
+    if (loseGame == 1) {
+        goToLose();
+    }
 
 }
 void goToGameTwo() {
+    REG_DISPCTL = MODE(0) | BG_ENABLE(1) | SPRITE_ENABLE;
+    DMANow(3, &mazeBackgroundTiles, &CHARBLOCK[2], mazeBackgroundTilesLen/2);
+    DMANow(3, &mazeTwoMap, &SCREENBLOCK[10], mazeTwoLen/2);
+    DMANow(3, &mazeBackgroundPal, BG_PALETTE, mazeBackgroundPalLen/2);
 
+    DMANow(3, spritesheetTiles, &CHARBLOCK[4], spritesheetTilesLen/2);
+    DMANow(3, spritesheetPal, SPRITE_PAL, spritesheetPalLen/2);
+
+    hideSprites();
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    initGameTwo();
+    state = GAMETWO;
 }
 
 void viewMapTwo() {
@@ -315,10 +358,47 @@ void goToCutsceneTwo() {
 }
 
 void gameThree() {
+    // updateGameThree();
+    drawGame();
+    REG_BG1HOFF = hOff;
+    REG_BG1VOFF = vOff;
 
+    // hideSprites();
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    if (BUTTON_PRESSED(BUTTON_SELECT)) {
+        goToPause();
+        // winGame = 1; //used for testing
+    }
+
+    //TODO add timer for this
+    if (BUTTON_PRESSED(BUTTON_B)) {
+        goToViewMapThree();
+    }
+
+    if (winGame == 1) {
+        goToWin();
+    }
+    if (loseGame == 1) {
+        goToLose();
+    }
 }
 void goToGameThree() {
+    REG_DISPCTL = MODE(0) | BG_ENABLE(1) | SPRITE_ENABLE;
+    DMANow(3, &mazeBackgroundTiles, &CHARBLOCK[2], mazeBackgroundTilesLen/2);
+    DMANow(3, &mazeThreeMap, &SCREENBLOCK[10], mazeThreeLen/2);
+    DMANow(3, &mazeBackgroundPal, BG_PALETTE, mazeBackgroundPalLen/2);
 
+    DMANow(3, spritesheetTiles, &CHARBLOCK[4], spritesheetTilesLen/2);
+    DMANow(3, spritesheetPal, SPRITE_PAL, spritesheetPalLen/2);
+
+    hideSprites();
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    initGameThree();
+    state = GAMETHREE;
 }
 
 void viewMapThree() {

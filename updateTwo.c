@@ -1,23 +1,24 @@
+
 #include "gba.h"
 #include "sprites.h"
 #include "game.h"
 #include "mode0.h"
 #include "spritesheet.h"
-#include "mazeOneCollision.h"
+#include "mazeTwoCollision.h"
 
 inline unsigned char colorAt(int x, int y){
-    return ((unsigned char *) mazeOneCollisionBitmap) [OFFSET(x, y, 512)];
+    return ((unsigned char *) mazeTwoCollisionBitmap) [OFFSET(x, y, 512)];
 
 }
 
-void updateGame() {
-    updateDylan();
-    updateGriever();
-    updateSpear();
-    updateHearts();
+void updateGameTwo() {
+    updateDylanTwo();
+    updateGrieversTwo();
+    updateSpearTwo();
+    updateHeartsTwo();
 }
 
-void updateDylan() {
+void updateDylanTwo() {
     int leftX = dylan.x;
     int rightX = dylan.x + dylan.width - 1;
     int topY = dylan.y;
@@ -79,7 +80,7 @@ void updateDylan() {
     if (vOff > (MAPTWOHEIGHT - SCREENHEIGHT)) vOff = (MAPTWOHEIGHT - SCREENHEIGHT);
 
     //either go to next level or win
-    if (collision(dylan.x, dylan.y, dylan.width, dylan.height, 254, 508, 32, 4)) {
+    if (collision(dylan.x, dylan.y, dylan.width, dylan.height, 0, 248, 4, 32)) {
         winGame = 1;
         hideSprites();
     }
@@ -91,7 +92,7 @@ void updateDylan() {
     }
 }
 
-void updateGriever() {
+void updateGrieversTwo() {
     for (int i = 0; i < 3; i++) {
         int leftX = griever[i].x;
         int rightX = griever[i].x + griever[i].width - 1;
@@ -192,7 +193,7 @@ void updateGriever() {
     }
 }
 
-void updateSpear() {
+void updateSpearTwo() {
     if (!spear.hide) {
         spear.x += spear.xVel;
         spear.y += spear.yVel;
@@ -222,11 +223,11 @@ void updateSpear() {
     // spear.x = dylan.x + 2;
     // spear.y = dylan.y + 2;
     if (BUTTON_PRESSED(BUTTON_A)) {
-        launchSpear();
+        launchSpearTwo();
     }
 }
 
-void launchSpear() {
+void launchSpearTwo() {
     // spear.xVel = 1;
     // spear.yVel = 1;
     // if (spear.hide == 1) {
@@ -255,7 +256,7 @@ void launchSpear() {
     // }
 }
 
-void updateHearts() {
+void updateHeartsTwo() {
     for (int i = 0; i < 3; i++) {
         if (collision(dylan.x, dylan.y, dylan.width, dylan.height, heart[i].x, heart[i].y, heart[i].width, heart[i].height)) {
             heart[i].active = 0;
@@ -266,6 +267,6 @@ void updateHearts() {
     }
 }
 
-void updateLetters() {
+void updateLettersTwo() {
 
 }

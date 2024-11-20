@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "cutscenes.tmx",
+    "activeFile": "mazeOneMap.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -19,22 +19,44 @@
         "cutscenes.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "mazeBackground.tsx": {
+            "scaleInDock": 5.5,
+            "scaleInEditor": 1
+        },
+        "mazeOneMap.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 276,
+                "y": 220.5
+            }
+        },
+        "mazeTwo.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 261,
+                "y": 262.5
+            }
         }
     },
     "last.exportedFilePath": "/Users/lekhyaadari/Desktop/Media Device Arch/mazeRunner",
     "last.imagePath": "/Users/lekhyaadari/Desktop/Media Device Arch/mazeRunner",
-    "map.height": 32,
+    "map.height": 64,
     "map.lastUsedExportFilter": "GBA source files - regular (*.c *.h)",
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 8,
     "map.tileWidth": 8,
-    "map.width": 32,
+    "map.width": 64,
     "openFiles": [
-        "cutscenes.tsx",
-        "cutscenes.tmx"
+        "mazeBackground.tsx",
+        "mazeOneMap.tmx"
     ],
     "project": "cutscenes.tiled-project",
     "recentFiles": [
+        "mazeBackground.tsx",
+        "mazeOneMap.tmx",
         "cutscenes.tsx",
         "cutscenes.tmx"
     ],
