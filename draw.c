@@ -59,7 +59,7 @@ void drawGriever() {
             shadowOAM[griever[i].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(griever[i].currentFrame*2, 6);
 
             if (griever[i].direction == RIGHT) {
-                shadowOAM[griever[i].oamIndex].attr1 = ATTR1_X(griever[i].x) | ATTR1_SMALL | ATTR1_HFLIP;
+                shadowOAM[griever[i].oamIndex].attr1 = ATTR1_X(griever[i].x - hOff) | ATTR1_SMALL | ATTR1_HFLIP;
             }
             if (griever[i].direction == UP) {
                 shadowOAM[griever[i].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(griever[i].currentFrame*2, 8);

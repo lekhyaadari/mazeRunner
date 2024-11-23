@@ -28,8 +28,16 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 276,
+                "x": 282.5,
                 "y": 220.5
+            }
+        },
+        "mazeThree.tmx": {
+            "scale": 1.089,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 255.7392102846648,
+                "y": 261.2488521579431
             }
         },
         "mazeTwo.tmx": {
@@ -50,11 +58,15 @@
     "map.tileWidth": 8,
     "map.width": 64,
     "openFiles": [
+        "mazeOneMap.tmx",
         "mazeBackground.tsx",
-        "mazeOneMap.tmx"
+        "mazeTwo.tmx",
+        "mazeThree.tmx"
     ],
     "project": "cutscenes.tiled-project",
     "recentFiles": [
+        "mazeThree.tmx",
+        "mazeTwo.tmx",
         "mazeBackground.tsx",
         "mazeOneMap.tmx",
         "cutscenes.tsx",

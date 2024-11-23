@@ -14,8 +14,10 @@
 #include "ViewMapOne.h"
 //Maze Two Maps
 #include "mazeTwo.h"
+#include "ViewMapTwo.h"
 //Maze Three Maps
 #include "mazeThree.h"
+#include "ViewMapThree.h"
 //Cutscene Maps
 #include "cutscenes.h"
 #include "cutscenesTiles.h"
@@ -161,6 +163,7 @@ void start() {
         goToInstructions();
     }
     if (BUTTON_PRESSED(BUTTON_START)) {
+        initGame();
         goToGameOne();
     }
     
@@ -181,6 +184,7 @@ void instructions() {
     waitForVBlank();
 
     if (BUTTON_PRESSED(BUTTON_START)) {
+        initGame();
         goToGameOne();
     }
 }
@@ -208,8 +212,8 @@ void gameOne() {
     DMANow(3, shadowOAM, OAM, 128*4);
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
-        // goToPause();
-        winGame = 1; //used for testing
+        goToPause();
+        // winGame = 1; //used for testing
     }
 
     //TODO add timer for this
@@ -238,7 +242,7 @@ void goToGameOne() {
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
-    initGame();
+    // initGame();
     state = GAMEONE;
 }
 
@@ -270,6 +274,7 @@ void cutsceneOne() {
     drawDialogue(dialogue);
 
     if (BUTTON_PRESSED(BUTTON_START)) {
+        initGameTwo();
         goToGameTwo();
     }
 
@@ -309,8 +314,8 @@ void gameTwo() {
     DMANow(3, shadowOAM, OAM, 128*4);
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
-        goToPause();
-        // winGame = 1; //used for testing
+        // goToPause();
+        winGame = 1; //used for testing
     }
 
     //TODO add timer for this
@@ -339,15 +344,28 @@ void goToGameTwo() {
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
-    initGameTwo();
+    // initGameTwo();
     state = GAMETWO;
 }
 
 void viewMapTwo() {
+    waitForVBlank();
 
+    if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
+        goToGameTwo();
+    }
 }
 void goToViewMapTwo() {
+    REG_DISPCTL = MODE(0) | BG_ENABLE(2);
+    DMANow(3, &ViewMapTwoTiles, &CHARBLOCK[3], ViewMapTwoTilesLen/2);
+    DMANow(3, &ViewMapTwoMap, &SCREENBLOCK[14], ViewMapTwoMapLen/2);
+    DMANow(3, &ViewMapTwoPal, BG_PALETTE, ViewMapTwoPalLen/2);
 
+    hideSprites();
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    state = VIEWTWO;
 }
 
 void cutsceneTwo() {
@@ -402,10 +420,23 @@ void goToGameThree() {
 }
 
 void viewMapThree() {
+    waitForVBlank();
 
+    if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
+        goToGameThree();
+    }
 }
 void goToViewMapThree() {
-    
+    REG_DISPCTL = MODE(0) | BG_ENABLE(2);
+    DMANow(3, &ViewMapThreeTiles, &CHARBLOCK[3], ViewMapThreeTilesLen/2);
+    DMANow(3, &ViewMapThreeMap, &SCREENBLOCK[14], ViewMapThreeMapLen/2);
+    DMANow(3, &ViewMapThreePal, BG_PALETTE, ViewMapThreePalLen/2);
+
+    hideSprites();
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    state = VIEWTHREE;
 }
 
 void pause() {

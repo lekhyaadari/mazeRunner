@@ -41,8 +41,8 @@ void initDylan() {
 
 void initGriever() {
     //griever 1
-    griever[0].x = 10;
-    griever[0].y = 28;
+    griever[0].x = 180;
+    griever[0].y = 24;
     griever[0].xVel = 1;
     griever[0].yVel = 1;
     griever[0].width = 16;
@@ -58,38 +58,38 @@ void initGriever() {
     griever[0].oamIndex = 1;
 
     //griever 2
-    griever[1].x = 450;
-    griever[1].y = 45;
-    griever[1].xVel = 1;
-    griever[1].yVel = 1;
-    griever[1].width = 16;
-    griever[1].height = 16;
-    griever[1].timeUntilNextFrame = 6;
-    griever[1].direction = RIGHT;
-    griever[1].isAnimating = 0;
-    griever[1].currentFrame = 0;
-    griever[1].numFrames = 4;
-    griever[1].active = 1;
-    griever[1].erased = 0;
-    griever[1].hide = 0;
-    griever[1].oamIndex = 2;
+    // griever[1].x = 450;
+    // griever[1].y = 45;
+    // griever[1].xVel = 1;
+    // griever[1].yVel = 1;
+    // griever[1].width = 16;
+    // griever[1].height = 16;
+    // griever[1].timeUntilNextFrame = 6;
+    // griever[1].direction = RIGHT;
+    // griever[1].isAnimating = 0;
+    // griever[1].currentFrame = 0;
+    // griever[1].numFrames = 4;
+    // griever[1].active = 1;
+    // griever[1].erased = 0;
+    // griever[1].hide = 0;
+    // griever[1].oamIndex = 2;
 
-    //griever 3
-    griever[2].x = 480;
-    griever[2].y = 255;
-    griever[2].xVel = 1;
-    griever[2].yVel = 1;
-    griever[2].width = 16;
-    griever[2].height = 16;
-    griever[2].timeUntilNextFrame = 6;
-    griever[2].direction = RIGHT;
-    griever[2].isAnimating = 0;
-    griever[2].currentFrame = 0;
-    griever[2].numFrames = 4;
-    griever[2].active = 1;
-    griever[2].erased = 0;
-    griever[2].hide = 0;
-    griever[2].oamIndex = 3;
+    // //griever 3
+    // griever[2].x = 480;
+    // griever[2].y = 255;
+    // griever[2].xVel = 1;
+    // griever[2].yVel = 1;
+    // griever[2].width = 16;
+    // griever[2].height = 16;
+    // griever[2].timeUntilNextFrame = 6;
+    // griever[2].direction = RIGHT;
+    // griever[2].isAnimating = 0;
+    // griever[2].currentFrame = 0;
+    // griever[2].numFrames = 4;
+    // griever[2].active = 1;
+    // griever[2].erased = 0;
+    // griever[2].hide = 0;
+    // griever[2].oamIndex = 3;
 
     int j = 4;
     for (int i = 3; i < 10; i++) {

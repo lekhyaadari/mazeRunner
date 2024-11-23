@@ -39,11 +39,88 @@ void initDylanTwo() {
 }
 
 void initGrieversTwo() {
+    //griever 1
+    griever[0].x = 236;
+    griever[0].y = 71;
+    griever[0].xVel = 1;
+    griever[0].yVel = 1;
+    griever[0].width = 16;
+    griever[0].height = 16;
+    griever[0].timeUntilNextFrame = 6;
+    griever[0].direction = RIGHT;
+    griever[0].isAnimating = 0;
+    griever[0].currentFrame = 0;
+    griever[0].numFrames = 4;
+    griever[0].active = 1;
+    griever[0].erased = 0;
+    griever[0].hide = 0;
+    griever[0].oamIndex = 1;
 
+    //griever 2
+    griever[1].x = 367;
+    griever[1].y = 260;
+    griever[1].xVel = 1;
+    griever[1].yVel = 1;
+    griever[1].width = 16;
+    griever[1].height = 16;
+    griever[1].timeUntilNextFrame = 6;
+    griever[1].direction = RIGHT;
+    griever[1].isAnimating = 0;
+    griever[1].currentFrame = 0;
+    griever[1].numFrames = 4;
+    griever[1].active = 1;
+    griever[1].erased = 0;
+    griever[1].hide = 0;
+    griever[1].oamIndex = 2;
+
+    //griever 3
+    griever[2].x = 95;
+    griever[2].y = 311;
+    griever[2].xVel = 1;
+    griever[2].yVel = 1;
+    griever[2].width = 16;
+    griever[2].height = 16;
+    griever[2].timeUntilNextFrame = 6;
+    griever[2].direction = RIGHT;
+    griever[2].isAnimating = 0;
+    griever[2].currentFrame = 0;
+    griever[2].numFrames = 4;
+    griever[2].active = 1;
+    griever[2].erased = 0;
+    griever[2].hide = 0;
+    griever[2].oamIndex = 3;
+
+    int j = 4;
+    for (int i = 3; i < 10; i++) {
+        griever[i].active = 0;
+        griever[i].hide = 1;
+        griever[i].erased = 1;
+        griever[i].oamIndex = j;
+        j++;
+    }
 }
 
 void initHeartsTwo() {
-
+    int j = 11;
+    for (int i = 0; i < 3; i++) {
+        heart[i].x = rand() % (MAPTWOWIDTH - 8);
+        heart[i].y = rand() % ((MAPTWOHEIGHT - 8)/2);
+        // TODO: add if checks for if hearts generate in a bush +  move them accordingly
+        heart[i].xVel = 0;
+        heart[i].yVel = 0;
+        heart[i].width = 8;
+        heart[i].height = 8;
+        heart[i].timeUntilNextFrame = 6;
+        heart[i].direction = RIGHT;
+        heart[i].isAnimating = 0;
+        heart[i].currentFrame = 0;
+        heart[i].numFrames = 4;
+        heart[i].active = 1;
+        heart[i].erased = 0;
+        heart[i].hide = 0;
+        heart[i].oamIndex = j;
+        j++;
+    }
 }
 
 void initLettersTwo() {
