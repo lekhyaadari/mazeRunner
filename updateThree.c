@@ -1,53 +1,56 @@
-
 #include "gba.h"
 #include "sprites.h"
 #include "game.h"
 #include "mode0.h"
 #include "spritesheet.h"
-#include "mazeTwoCollision.h"
+#include "mazeThreeCollision.h"
 
 inline unsigned char colorAt(int x, int y){
-    return ((unsigned char *) mazeTwoCollisionBitmap) [OFFSET(x, y, 512)];
+    return ((unsigned char *) mazeThreeCollisionBitmap) [OFFSET(x, y, 512)];
 
 }
 
-void updateGameTwo() {
-    updateDylanTwo();
-    updateGrieversTwo();
-    updateSpearTwo();
-    updateHeartsTwo();
+void updateGameThree() {
+    updateDylanThree();
+    updateGrieverThree();
+    updateSpearThree();
+    updateHeartsThree();
+    updateTimerThree();
 }
 
-void updateDylanTwo() {
+void updateDylanThree() {
     int leftX = dylan.x;
     int rightX = dylan.x + dylan.width - 1;
     int topY = dylan.y;
     int bottomY = dylan.y + dylan.height - 1;
+    int middleX = dylan.width / 2;
+    int middleY = dylan.height / 2;
 
     dylan.isAnimating = 0;
 
-    if (BUTTON_HELD(BUTTON_RIGHT) && colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) && (dylan.x + dylan.width < 512)) {
+    if (BUTTON_HELD(BUTTON_RIGHT) && colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) && (dylan.x + dylan.width < 512) && colorAt(rightX + dylan.xVel, topY + 8)) {
         dylan.isAnimating = 1;
         // if (colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) ) {
             dylan.x += dylan.xVel;
             dylan.direction = RIGHT;
+            // mgba_printf("moving right");
         // }
     }
-    if (BUTTON_HELD(BUTTON_LEFT) && colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) && (dylan.x > 0)) {
+    if (BUTTON_HELD(BUTTON_LEFT) && colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) && (dylan.x > 0) && colorAt(leftX - dylan.xVel, topY + 8)) {
         dylan.isAnimating = 1;
         // if (colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) ) {
             dylan.x -= dylan.xVel;
             dylan.direction = LEFT;
         // }
     }
-    if (BUTTON_HELD(BUTTON_UP) && colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) && (dylan.y > 0)) {
+    if (BUTTON_HELD(BUTTON_UP) && colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) && (dylan.y > 0) && colorAt(leftX + 8, topY - dylan.yVel)) {
         dylan.isAnimating = 1;
         // if (colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) ) {
             dylan.y -= dylan.yVel;
             dylan.direction = UP;
         // }
     }
-    if (BUTTON_HELD(BUTTON_DOWN) && colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) && (dylan.y + dylan.height < 512)) {
+    if (BUTTON_HELD(BUTTON_DOWN) && colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) && (dylan.y + dylan.height < 512) && colorAt(leftX + 8, bottomY + dylan.yVel)) {
         dylan.isAnimating = 1;
         // if (colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) ) {
             dylan.y += dylan.yVel;
@@ -80,7 +83,7 @@ void updateDylanTwo() {
     if (vOff > (MAPTWOHEIGHT - SCREENHEIGHT)) vOff = (MAPTWOHEIGHT - SCREENHEIGHT);
 
     //either go to next level or win
-    if (collision(dylan.x, dylan.y, dylan.width, dylan.height, 0, 248, 4, 32)) {
+    if (collision(dylan.x, dylan.y, dylan.width, dylan.height, 254, 508, 32, 4)) {
         winGame = 1;
         hideSprites();
     }
@@ -92,8 +95,8 @@ void updateDylanTwo() {
     }
 }
 
-void updateGrieversTwo() {
-    for (int i = 0; i < 3; i++) {
+void updateGrieversThree() {
+    for (int i = 0; i < 10; i++) {
         int leftX = griever[i].x;
         int rightX = griever[i].x + griever[i].width - 1;
         int topY = griever[i].y;
@@ -110,26 +113,30 @@ void updateGrieversTwo() {
 
             if (griever[i].direction == RIGHT) {
                 griever[i].x += griever[i].xVel;
-                if ((colorAt(rightX + 1, topY) == 0) && (colorAt(rightX + 1, bottomY) == 0)) {
+                if ((colorAt(rightX + 1, topY) == 0) || (colorAt(rightX + 1, bottomY) == 0) || (colorAt(rightX + 1, topY + 8) == 0)) {
+                    // mgba_printf("x, y is: %d, %d", griever[i].x, griever[i].y);
                     // griever[i].direction = LEFT;
                     griever[i].direction = rand() % 4;
                 }
             } else if (griever[i].direction == LEFT) {
                 griever[i].x -= griever[i].xVel;
-                if ((colorAt(leftX - 1, topY) == 0) && (colorAt(leftX - 1, bottomY) == 0)) {
+                if ((colorAt(leftX - 1, topY) == 0) || (colorAt(leftX - 1, bottomY) == 0) || (colorAt(leftX - 1, topY + 8) == 0)) {
+                    // mgba_printf("x, y is: %d, %d", griever[i].x, griever[i].y);
                     // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;
                 }
             }
             if (griever[i].direction == UP) {
                 griever[i].y -= griever[i].yVel;
-                if ((colorAt(leftX, topY - 1) == 0) && (colorAt(rightX, topY - 1) == 0)) {
+                if ((colorAt(leftX, topY - 1) == 0) || (colorAt(rightX, topY - 1) == 0) || (colorAt(leftX + 8, topY - 1) == 0)) {
+                    // mgba_printf("x, y is: %d, %d", griever[i].x, griever[i].y);
                     // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;
                 }
             } else if (griever[i].direction == DOWN) {
                 griever[i].y += griever[i].yVel;
-                if ((colorAt(leftX, bottomY + 1) == 0) && (colorAt(rightX, bottomY + 1) == 0)) {
+                if ((colorAt(leftX, bottomY + 1) == 0) || (colorAt(rightX, bottomY + 1) == 0) || (colorAt(leftX + 8, bottomY + 1) == 0)) {
+                    // mgba_printf("x, y is: %d, %d", griever[i].x, griever[i].y);
                     // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;
                 }
@@ -150,7 +157,7 @@ void updateGrieversTwo() {
 
         // TODO add timer for this
         if (heartActive) {
-            if (BUTTON_PRESSED(BUTTON_RSHOULDER)) {
+            if (BUTTON_HELD(BUTTON_RSHOULDER)) {
                 griever[i].x = 0;
                 griever[i].y = 0;
                 griever[i].active = 0;
@@ -189,11 +196,13 @@ void updateGrieversTwo() {
             griever[i].hide = 1;
             griever[i].xVel = 0;
             griever[i].yVel = 0;
+
+            initNewGriever();
         }
     }
 }
 
-void updateSpearTwo() {
+void updateSpear() {
     if (!spear.hide) {
         spear.x += spear.xVel;
         spear.y += spear.yVel;
@@ -220,43 +229,34 @@ void updateSpearTwo() {
     } 
 
     spear.direction = dylan.direction;
-    // spear.x = dylan.x + 2;
-    // spear.y = dylan.y + 2;
     if (BUTTON_PRESSED(BUTTON_A)) {
-        launchSpearTwo();
+        launchSpear();
     }
 }
 
-void launchSpearTwo() {
-    // spear.xVel = 1;
-    // spear.yVel = 1;
-    // if (spear.hide == 1) {
+void launchSpear() {
         spear.hide = 0;
         spear.direction = dylan.direction;
         spear.x = dylan.x + 2;
         spear.y = dylan.y + 2;
 
         if (spear.direction == RIGHT) {
-            // spear.x += spear.xVel;
             spear.xVel = 1;
             spear.yVel = 0;
         } else if (spear.direction == LEFT) {
-            // spear.x -= spear.xVel;
             spear.xVel = -1;
             spear.yVel = 0;
         } else if (spear.direction == DOWN) {
-            // spear.y += spear.yVel;
             spear.xVel = 0;
             spear.yVel = 1;
         } else if (spear.direction == UP) {
-            // spear.y -= spear.yVel;
             spear.xVel = 0;
             spear.yVel = -1;
         }
     // }
 }
 
-void updateHeartsTwo() {
+void updateHeartsThree() {
     for (int i = 0; i < 3; i++) {
         if (collision(dylan.x, dylan.y, dylan.width, dylan.height, heart[i].x, heart[i].y, heart[i].width, heart[i].height)) {
             heart[i].active = 0;
@@ -265,9 +265,16 @@ void updateHeartsTwo() {
             heartActive = 1;
         }
     }
+    // if (heartActive) {
+    //     heartTimer--;
+    //     if (heartTimer == 0) {
+    //         heartActive = 0;
+    //         heartTimer = 1800;
+    //     }
+    // }
 }
 
-void updateLettersTwo() {
+void updateLetterThree() {
     if (gameTimer == 0) {
         loseGame = 1;
         gameTimer = 7200;

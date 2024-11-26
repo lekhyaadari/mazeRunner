@@ -12,7 +12,7 @@ int vOff;
 SPRITE dylan;
 SPRITE griever[10];
 SPRITE heart[3];
-SPRITE letters[26];
+SPRITE letters[28];
 SPRITE spear;
 typedef enum {UP, DOWN, RIGHT, LEFT} DIRECTION;
 
@@ -22,6 +22,12 @@ int winGame;
 int loseGame;
 int heartActive;
 int launchSpearBool;
+int gameTimer;
+int heartTimer;
+int minutes;
+int minOnes;
+int secTens;
+int secOnes;
 
 //Game One
 void initGame();
@@ -41,14 +47,16 @@ void initHearts();
 void updateHearts();
 void launchSpears();
 void drawHearts();
-void initLetters();
-void updateLetters();
-void drawLetters();
+void initTimer();
+void updateTimer();
+void drawTimer();
 
 //Game Two
 void initGameTwo();
 void initDylanTwo();
 void initGrieversTwo();
+void initNewGrieverTwo();
+void initSpearTwo();
 void initHeartsTwo();
 void initLettersTwo();
 void updateGameTwo();
@@ -62,6 +70,8 @@ void launchSpearTwo();
 void initGameThree();
 void initDylanThree();
 void initGrieversThree();
+void initNewGrieverThree();
+void initSpearThree();
 void initHeartsThree();
 void initLettersThree();
 void updateGameThree();

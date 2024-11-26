@@ -30,6 +30,7 @@ void drawDialogue(volatile unsigned char* dialogue);
 int getTileIDForChar(char c);
 int timeUntilNextLetter = 5;
 int currentIndex = 0;
+int viewTimer = 120;
 
 OBJ_ATTR shadowOAM[128];
 
@@ -212,8 +213,8 @@ void gameOne() {
     DMANow(3, shadowOAM, OAM, 128*4);
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
-        goToPause();
-        // winGame = 1; //used for testing
+        // goToPause();
+        winGame = 1; //used for testing
     }
 
     //TODO add timer for this
@@ -249,9 +250,16 @@ void goToGameOne() {
 void viewMapOne() {
     waitForVBlank();
 
-    if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
+    if (viewTimer == 0) {
         goToGameOne();
+        viewTimer = 120;
+    } else {
+        viewTimer--;
     }
+
+    // if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
+    //     goToGameOne();
+    // }
 }
 void goToViewMapOne() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(2);
@@ -270,7 +278,7 @@ void cutsceneOne() {
     waitForVBlank();
 
     // SCREENBLOCK[14].tilemap[OFFSET(1, 1, 32)] = TILEMAP_ENTRY_TILEID(2);
-    volatile unsigned char dialogue[] = "HELLO";
+    volatile unsigned char dialogue[] = "YOU MADE IT BACK IN TIME!     BUT... EVERYONE IS STILL      STUCK IN THE GLADE   VENTURE  BACK INTO THE MAZE TO FIND    ANOTHER WAY TO ESCAPE!        PRESS START TO BEGIN LEVEL    TWO!";
     drawDialogue(dialogue);
 
     if (BUTTON_PRESSED(BUTTON_START)) {
@@ -351,9 +359,16 @@ void goToGameTwo() {
 void viewMapTwo() {
     waitForVBlank();
 
-    if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
+    if (viewTimer == 0) {
         goToGameTwo();
+        viewTimer = 120;
+    } else {
+        viewTimer--;
     }
+
+    // if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
+    //     goToGameTwo();
+    // }
 }
 void goToViewMapTwo() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(2);
@@ -369,9 +384,40 @@ void goToViewMapTwo() {
 }
 
 void cutsceneTwo() {
+    waitForVBlank();
 
+    // SCREENBLOCK[14].tilemap[OFFSET(1, 1, 32)] = TILEMAP_ENTRY_TILEID(2);
+    volatile unsigned char dialogue[] = "STILL NO LUCK ESCAPING. AND YOU MISSED A NEW ARRIVAL TO THE GLADE! SHE EVEN BROUGHT ANTI VENOM SHOTS TO PROTECT AGAINST GRIEVERS. FOR ONE TIME USE, PRESS THE LEFT SHOULDER BUTTON AT ANY TIME AND YOU WILL BE ABLE TO PROTECT YOURSELF AGAINST ONE COLLISION WITH A GRIEVER. THIS IS YOUR LAST CHANCE TO FIND AN ESCAPE! GOOD LUCK! PRESS START TO BEGIN LEVEL THREE!";
+    drawDialogue(dialogue);
+
+    if (BUTTON_PRESSED(BUTTON_START)) {
+        initGameTwo();
+        goToGameTwo();
+    }
+
+    if (BUTTON_PRESSED(BUTTON_SELECT)) {
+        goToStart();
+    }
+
+    if (BUTTON_PRESSED(BUTTON_RSHOULDER)) {
+        goToWin(); //just used for testing, won't be part of final submission
+    }
 }
 void goToCutsceneTwo() {
+    REG_DISPCTL = MODE(0) | BG_ENABLE(2);
+    DMANow(3, &cutscenesTilesTiles, &CHARBLOCK[3], cutscenesTilesTilesLen/2);
+    DMANow(3, &cutscenesMap, &SCREENBLOCK[14], cutscenesLen/2);
+    DMANow(3, &cutscenesTilesPal, BG_PALETTE, cutscenesTilesPalLen/2);
+
+    hideSprites();
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    winGame = 0;
+    loseGame = 0;
+    heartActive = 0;
+
+    state = CUTSCENETWO;
 
 }
 
@@ -422,8 +468,11 @@ void goToGameThree() {
 void viewMapThree() {
     waitForVBlank();
 
-    if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
+    if (viewTimer == 0) {
         goToGameThree();
+        viewTimer = 120;
+    } else {
+        viewTimer--;
     }
 }
 void goToViewMapThree() {
@@ -510,8 +559,8 @@ void drawDialogue(volatile unsigned char* dialogue) {
 
     if (timeUntilNextLetter == 0) {
         if (dialogue[currentIndex] != '\0') {
-            int x = currentIndex % 32;
-            int y = (currentIndex / 32) + 1;
+            int x = 1 + (currentIndex % 30);
+            int y = 1 + (currentIndex / 30);
 
             int tileID = getTileIDForChar(dialogue[currentIndex]);
 
@@ -531,6 +580,10 @@ int getTileIDForChar(char c) {
         return c - 'A' + 1;
     } else if (c == ' ') {
         return 0;
+    } else if (c == '!') {
+        return 28;
+    } else if (c == '.') {
+        return 27;
     } else {
         return 0;
     }
