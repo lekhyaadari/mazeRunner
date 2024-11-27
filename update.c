@@ -19,6 +19,8 @@ void updateGame() {
 }
 
 void updateDylan() {
+    dylan.oamIndex = 0;
+
     int leftX = dylan.x;
     int rightX = dylan.x + dylan.width - 1;
     int topY = dylan.y;
@@ -96,6 +98,7 @@ void updateDylan() {
 }
 
 void updateGriever() {
+    griever[0].oamIndex = 1;
     for (int i = 0; i < 10; i++) {
         int leftX = griever[i].x;
         int rightX = griever[i].x + griever[i].width - 1;

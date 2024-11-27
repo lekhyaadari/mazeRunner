@@ -12,10 +12,10 @@ inline unsigned char colorAt(int x, int y){
 
 void updateGameThree() {
     updateDylanThree();
-    updateGrieverThree();
+    updateGrieversThree();
     updateSpearThree();
     updateHeartsThree();
-    updateTimerThree();
+    updateLettersThree();
 }
 
 void updateDylanThree() {
@@ -202,7 +202,7 @@ void updateGrieversThree() {
     }
 }
 
-void updateSpear() {
+void updateSpearThree() {
     if (!spear.hide) {
         spear.x += spear.xVel;
         spear.y += spear.yVel;
@@ -234,27 +234,27 @@ void updateSpear() {
     }
 }
 
-void launchSpear() {
-        spear.hide = 0;
-        spear.direction = dylan.direction;
-        spear.x = dylan.x + 2;
-        spear.y = dylan.y + 2;
+// void launchSpear() {
+//         spear.hide = 0;
+//         spear.direction = dylan.direction;
+//         spear.x = dylan.x + 2;
+//         spear.y = dylan.y + 2;
 
-        if (spear.direction == RIGHT) {
-            spear.xVel = 1;
-            spear.yVel = 0;
-        } else if (spear.direction == LEFT) {
-            spear.xVel = -1;
-            spear.yVel = 0;
-        } else if (spear.direction == DOWN) {
-            spear.xVel = 0;
-            spear.yVel = 1;
-        } else if (spear.direction == UP) {
-            spear.xVel = 0;
-            spear.yVel = -1;
-        }
-    // }
-}
+//         if (spear.direction == RIGHT) {
+//             spear.xVel = 1;
+//             spear.yVel = 0;
+//         } else if (spear.direction == LEFT) {
+//             spear.xVel = -1;
+//             spear.yVel = 0;
+//         } else if (spear.direction == DOWN) {
+//             spear.xVel = 0;
+//             spear.yVel = 1;
+//         } else if (spear.direction == UP) {
+//             spear.xVel = 0;
+//             spear.yVel = -1;
+//         }
+//     // }
+// }
 
 void updateHeartsThree() {
     for (int i = 0; i < 3; i++) {

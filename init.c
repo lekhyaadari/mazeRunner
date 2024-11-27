@@ -168,7 +168,7 @@ void initTimer() {
     // Letter T
     letters[1].width = 8;
     letters[1].height = 8;
-    letters[1].active = 0;
+    // letters[1].active = 0;
     letters[1].active = 1;
     letters[1].hide = 0;
     letters[1].oamIndex = 20;
@@ -176,7 +176,7 @@ void initTimer() {
     // Letter I
     letters[2].width = 8;
     letters[2].height = 8;
-    letters[2].active = 0;
+    // letters[2].active = 0;
     letters[2].active = 1;
     letters[2].hide = 0;
     letters[2].oamIndex = 21;
@@ -184,7 +184,7 @@ void initTimer() {
     // Letter M
     letters[3].width = 8;
     letters[3].height = 8;
-    letters[3].active = 0;
+    // letters[3].active = 0;
     letters[3].active = 1;
     letters[3].hide = 0;
     letters[3].oamIndex = 22;
@@ -192,7 +192,7 @@ void initTimer() {
     // Letter E
     letters[4].width = 8;
     letters[4].height = 8;
-    letters[4].active = 0;
+    // letters[4].active = 0;
     letters[4].active = 1;
     letters[4].hide = 0;
     letters[4].oamIndex = 23;
@@ -200,7 +200,7 @@ void initTimer() {
     // Letter L
     letters[5].width = 8;
     letters[5].height = 8;
-    letters[5].active = 0;
+    // letters[5].active = 0;
     letters[5].active = 1;
     letters[5].hide = 0;
     letters[5].oamIndex = 24;
@@ -208,7 +208,7 @@ void initTimer() {
     // Letter E
     letters[6].width = 8;
     letters[6].height = 8;
-    letters[6].active = 0;
+    // letters[6].active = 0;
     letters[6].active = 1;
     letters[6].hide = 0;
     letters[6].oamIndex = 25;
@@ -216,7 +216,7 @@ void initTimer() {
     // Letter F
     letters[7].width = 8;
     letters[7].height = 8;
-    letters[7].active = 0;
+    // letters[7].active = 0;
     letters[7].active = 1;
     letters[7].hide = 0;
     letters[7].oamIndex = 26;
@@ -224,7 +224,7 @@ void initTimer() {
     // Letter T
     letters[8].width = 8;
     letters[8].height = 8;
-    letters[8].active = 0;
+    // letters[8].active = 0;
     letters[8].active = 1;
     letters[8].hide = 0;
     letters[8].oamIndex = 27;
@@ -232,7 +232,7 @@ void initTimer() {
     // SYMBOL :
     letters[9].width = 8;
     letters[9].height = 8;
-    letters[9].active = 0;
+    // letters[9].active = 0;
     letters[9].active = 1;
     letters[9].hide = 0;
     letters[9].oamIndex = 28;
@@ -241,7 +241,7 @@ void initTimer() {
     // (0)0 : 00
     letters[10].width = 8;
     letters[10].height = 8;
-    letters[10].active = 0;
+    // letters[10].active = 0;
     letters[10].active = 1;
     letters[10].hide = 0;
     letters[10].oamIndex = 29;
@@ -249,7 +249,7 @@ void initTimer() {
     // 0(0) : 00
     letters[11].width = 8;
     letters[11].height = 8;
-    letters[11].active = 0;
+    // letters[11].active = 0;
     letters[11].active = 1;
     letters[11].hide = 0;
     letters[11].oamIndex = 30;
@@ -257,7 +257,7 @@ void initTimer() {
     //:
     letters[12].width = 8;
     letters[12].height = 8;
-    letters[12].active = 0;
+    // letters[12].active = 0;
     letters[12].active = 1;
     letters[12].hide = 0;
     letters[12].oamIndex = 31;
@@ -265,7 +265,7 @@ void initTimer() {
     // 00: (0)0
     letters[13].width = 8;
     letters[13].height = 8;
-    letters[13].active = 0;
+    // letters[13].active = 0;
     letters[13].active = 1;
     letters[13].hide = 0;
     letters[13].oamIndex = 32;
@@ -273,7 +273,7 @@ void initTimer() {
     // 00 : 0(0)
     letters[14].width = 8;
     letters[14].height = 8;
-    letters[14].active = 0;
+    // letters[14].active = 0;
     letters[14].active = 1;
     letters[14].hide = 0;
     letters[14].oamIndex = 33;

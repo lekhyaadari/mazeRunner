@@ -1,12 +1,15 @@
 //Part of Scaffold
 #include "gba.h"
 #include "mode0.h"
+#include "mode4.h"
 #include "sprites.h"
 #include "print.h"
 //State Screen Maps and Spritesheet
 #include "startScreen.h"
+#include "mazeStart.h"
 #include "instructScreen.h"
 #include "pauseScreen.h"
+#include "pauseParallax.h"
 #include "spritesheet.h"
 //Maze One Maps
 #include "mazeBackground.h"
@@ -31,6 +34,9 @@ int getTileIDForChar(char c);
 int timeUntilNextLetter = 5;
 int currentIndex = 0;
 int viewTimer = 120;
+void initPauseSprites();
+void updatePauseSprites();
+void drawPauseSprites();
 
 OBJ_ATTR shadowOAM[128];
 
@@ -84,6 +90,8 @@ unsigned short oldButtons;
 //surrogate variables
 int hOff;
 int vOff;
+int hOffStart;
+int vOffStart;
 
 //win and lose game
 int winGame;
@@ -147,9 +155,10 @@ void initialize() {
     mgba_open();
 
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
-    REG_BG0CNT = BG_CHARBLOCK(0) | BG_SCREENBLOCK(8) | BG_SIZE_SMALL | BG_4BPP;
+    REG_BG0CNT = BG_CHARBLOCK(0) | BG_SCREENBLOCK(14) | BG_SIZE_SMALL | BG_4BPP | 1;
     REG_BG1CNT = BG_CHARBLOCK(2) | BG_SCREENBLOCK(10) | BG_SIZE_LARGE | BG_4BPP;
-    REG_BG2CNT = BG_CHARBLOCK(3) | BG_SCREENBLOCK(14) | BG_SIZE_SMALL | BG_4BPP;
+    REG_BG2CNT = BG_CHARBLOCK(3) | BG_SCREENBLOCK(8) | BG_SIZE_SMALL | BG_4BPP | 0;
+    REG_BG3CNT = BG_CHARBLOCK(3) | BG_SCREENBLOCK(8) | BG_SIZE_WIDE | BG_4BPP | 0;
 
     // REG_BG0HOFF = hOff;
     // REG_BG0VOFF = vOff;
@@ -159,6 +168,7 @@ void initialize() {
 
 void start() {
     waitForVBlank();
+    flipPage();
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
         goToInstructions();
@@ -171,11 +181,14 @@ void start() {
 }
 void goToStart() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
+    // DMANow(3, mazeStartPal, BG_PALETTE, mazeStartPalLen/2);
+    // drawFullscreenImage4(mazeStartBitmap);
     DMANow(3, &startScreenTiles, &CHARBLOCK[0], startScreenTilesLen/2);
-    DMANow(3, &startScreenMap, &SCREENBLOCK[8], startScreenMapLen/2);
+    DMANow(3, &startScreenMap, &SCREENBLOCK[14], startScreenMapLen/2);
     DMANow(3, &startScreenPal, BG_PALETTE, startScreenPalLen/2);
 
     waitForVBlank();
+    // flipPage();
     DMANow(3, shadowOAM, OAM, 128*4);
 
     state = START;
@@ -192,7 +205,7 @@ void instructions() {
 void goToInstructions() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
     DMANow(3, &instructScreenTiles, &CHARBLOCK[0], instructScreenTilesLen/2);
-    DMANow(3, &instructScreenMap, &SCREENBLOCK[8], instructScreenMapLen/2);
+    DMANow(3, &instructScreenMap, &SCREENBLOCK[14], instructScreenMapLen/2);
     DMANow(3, &instructScreenPal, BG_PALETTE, instructScreenPalLen/2);
 
     hideSprites();
@@ -213,8 +226,8 @@ void gameOne() {
     DMANow(3, shadowOAM, OAM, 128*4);
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
-        // goToPause();
-        winGame = 1; //used for testing
+        goToPause();
+        // winGame = 1; //used for testing
     }
 
     //TODO add timer for this
@@ -264,7 +277,7 @@ void viewMapOne() {
 void goToViewMapOne() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(2);
     DMANow(3, &ViewMapOneTiles, &CHARBLOCK[3], ViewMapOneTilesLen/2);
-    DMANow(3, &ViewMapOneMap, &SCREENBLOCK[14], ViewMapOneMapLen/2);
+    DMANow(3, &ViewMapOneMap, &SCREENBLOCK[8], ViewMapOneMapLen/2);
     DMANow(3, &ViewMapOnePal, BG_PALETTE, ViewMapOnePalLen/2);
 
     hideSprites();
@@ -297,7 +310,7 @@ void cutsceneOne() {
 void goToCutsceneOne() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(2);
     DMANow(3, &cutscenesTilesTiles, &CHARBLOCK[3], cutscenesTilesTilesLen/2);
-    DMANow(3, &cutscenesMap, &SCREENBLOCK[14], cutscenesLen/2);
+    DMANow(3, &cutscenesMap, &SCREENBLOCK[8], cutscenesLen/2);
     DMANow(3, &cutscenesTilesPal, BG_PALETTE, cutscenesTilesPalLen/2);
 
     hideSprites();
@@ -373,7 +386,7 @@ void viewMapTwo() {
 void goToViewMapTwo() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(2);
     DMANow(3, &ViewMapTwoTiles, &CHARBLOCK[3], ViewMapTwoTilesLen/2);
-    DMANow(3, &ViewMapTwoMap, &SCREENBLOCK[14], ViewMapTwoMapLen/2);
+    DMANow(3, &ViewMapTwoMap, &SCREENBLOCK[8], ViewMapTwoMapLen/2);
     DMANow(3, &ViewMapTwoPal, BG_PALETTE, ViewMapTwoPalLen/2);
 
     hideSprites();
@@ -406,7 +419,7 @@ void cutsceneTwo() {
 void goToCutsceneTwo() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(2);
     DMANow(3, &cutscenesTilesTiles, &CHARBLOCK[3], cutscenesTilesTilesLen/2);
-    DMANow(3, &cutscenesMap, &SCREENBLOCK[14], cutscenesLen/2);
+    DMANow(3, &cutscenesMap, &SCREENBLOCK[8], cutscenesLen/2);
     DMANow(3, &cutscenesTilesPal, BG_PALETTE, cutscenesTilesPalLen/2);
 
     hideSprites();
@@ -478,7 +491,7 @@ void viewMapThree() {
 void goToViewMapThree() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(2);
     DMANow(3, &ViewMapThreeTiles, &CHARBLOCK[3], ViewMapThreeTilesLen/2);
-    DMANow(3, &ViewMapThreeMap, &SCREENBLOCK[14], ViewMapThreeMapLen/2);
+    DMANow(3, &ViewMapThreeMap, &SCREENBLOCK[8], ViewMapThreeMapLen/2);
     DMANow(3, &ViewMapThreePal, BG_PALETTE, ViewMapThreePalLen/2);
 
     hideSprites();
@@ -489,7 +502,12 @@ void goToViewMapThree() {
 }
 
 void pause() {
+    hOffStart += 1;
+    updatePauseSprites();
     waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+    REG_BG2HOFF = hOffStart;
+    drawPauseSprites();
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
         goToGameOne();
@@ -499,16 +517,167 @@ void pause() {
     }
 }
 void goToPause() {
-    REG_DISPCTL = MODE(0) | BG_ENABLE(0);
+    REG_DISPCTL = MODE(0) | BG_ENABLE(0) | BG_ENABLE(2) | SPRITE_ENABLE;
     DMANow(3, &pauseScreenTiles, &CHARBLOCK[0], pauseScreenTilesLen/2);
-    DMANow(3, &pauseScreenMap, &SCREENBLOCK[8], pauseScreenMapLen/2);
-    DMANow(3, &pauseScreenPal, BG_PALETTE, pauseScreenPalLen/2);
+    DMANow(3, &pauseScreenMap, &SCREENBLOCK[14], pauseScreenMapLen/2);
+    // DMANow(3, &pauseScreenPal, BG_PALETTE, pauseScreenPalLen/2);
 
-    hideSprites();
+    DMANow(3, &pauseParallaxTiles, &CHARBLOCK[3], pauseParallaxTilesLen/2);
+    DMANow(3, &pauseParallaxMap, &SCREENBLOCK[8], pauseParallaxMapLen/2);
+    DMANow(3, &pauseParallaxPal, BG_PALETTE, pauseParallaxPalLen/2);
+
+    DMANow(3, spritesheetTiles, &CHARBLOCK[4], spritesheetTilesLen/2);
+    DMANow(3, spritesheetPal, SPRITE_PAL, spritesheetPalLen/2);
+
+    initPauseSprites();
+
+    // hideSprites();
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
+    hOffStart = 0;
+    vOffStart = 0;
+
     state = PAUSE;
+}
+void initPauseSprites() {
+    dylanPause.x = 135;
+    dylanPause.y = 116;
+    dylanPause.xVel = 0;
+    dylanPause.yVel = 0;
+    dylanPause.width = 16;
+    dylanPause.height = 16;
+    dylanPause.timeUntilNextFrame = 4;
+    dylanPause.direction = RIGHT;
+    dylanPause.isAnimating = 1;
+    dylanPause.currentFrame = 0;
+    dylanPause.numFrames = 4;
+    dylanPause.active = 1;
+    dylanPause.erased = 0;
+    dylanPause.hide = 0;
+    dylanPause.oamIndex = 0;
+
+    grieverPause.x = 80;
+    grieverPause.y = 116;
+    grieverPause.xVel = 0;
+    grieverPause.yVel = 0;
+    grieverPause.width = 16;
+    grieverPause.height = 16;
+    grieverPause.timeUntilNextFrame = 4;
+    grieverPause.direction = RIGHT;
+    grieverPause.isAnimating = 1;
+    grieverPause.currentFrame = 0;
+    grieverPause.numFrames = 4;
+    grieverPause.active = 1;
+    grieverPause.erased = 0;
+    grieverPause.hide = 0;
+    grieverPause.oamIndex = 1;
+
+    //PAUSED
+    letters[15].width = 8;
+    letters[15].height = 8;
+    letters[15].active = 1;
+    letters[15].hide = 0;
+    letters[15].oamIndex = 2;
+
+    letters[16].width = 8;
+    letters[16].height = 8;
+    letters[16].active = 1;
+    letters[16].hide = 0;
+    letters[16].oamIndex = 3;
+
+    letters[17].width = 8;
+    letters[17].height = 8;
+    letters[17].active = 1;
+    letters[17].hide = 0;
+    letters[17].oamIndex = 4;
+
+    letters[18].width = 8;
+    letters[18].height = 8;
+    letters[18].active = 1;
+    letters[18].hide = 0;
+    letters[18].oamIndex = 5;
+
+    letters[19].width = 8;
+    letters[19].height = 8;
+    letters[19].active = 1;
+    letters[19].hide = 0;
+    letters[19].oamIndex = 6;
+
+    letters[20].width = 8;
+    letters[20].height = 8;
+    letters[20].active = 1;
+    letters[20].hide = 0;
+    letters[20].oamIndex = 7;
+}
+void updatePauseSprites() {
+    if (dylanPause.isAnimating == 1) {
+        dylanPause.timeUntilNextFrame--;
+        if(dylanPause.timeUntilNextFrame == 0) {
+            dylanPause.currentFrame = (dylanPause.currentFrame + 1) % dylanPause.numFrames;
+            dylanPause.timeUntilNextFrame = 4;
+        }
+    } else {
+        dylanPause.currentFrame = 0;
+        dylanPause.timeUntilNextFrame = 4;
+    }
+
+    if (grieverPause.isAnimating == 1) {
+        grieverPause.timeUntilNextFrame--;
+        if(grieverPause.timeUntilNextFrame == 0) {
+            grieverPause.currentFrame = (grieverPause.currentFrame + 1) % grieverPause.numFrames;
+            grieverPause.timeUntilNextFrame = 4;
+        }
+    } else {
+        grieverPause.currentFrame = 0;
+        grieverPause.timeUntilNextFrame = 4;
+    }
+}
+void drawPauseSprites() {
+    shadowOAM[dylanPause.oamIndex].attr0 = ATTR0_Y(dylanPause.y) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+    shadowOAM[dylanPause.oamIndex].attr1 = ATTR1_X(dylanPause.x) | ATTR1_SMALL;
+    shadowOAM[dylanPause.oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylanPause.currentFrame*2, 0);
+
+    if (dylanPause.direction == RIGHT) {
+        shadowOAM[dylanPause.oamIndex].attr1 = ATTR1_HFLIP | ATTR1_X(dylanPause.x) | ATTR1_SMALL;
+    }
+
+    shadowOAM[grieverPause.oamIndex].attr0 = ATTR0_Y(grieverPause.y) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+    shadowOAM[grieverPause.oamIndex].attr1 = ATTR1_X(grieverPause.x) | ATTR1_SMALL;
+    shadowOAM[grieverPause.oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(grieverPause.currentFrame*2, 6);
+
+    if (grieverPause.direction == RIGHT) {
+        shadowOAM[grieverPause.oamIndex].attr1 = ATTR1_X(grieverPause.x) | ATTR1_SMALL | ATTR1_HFLIP;
+    }
+
+    for (int i = 8; i < 128; i++) {
+        shadowOAM[i].attr0 = ATTR0_HIDE;
+    }
+
+    //PAUSED
+    shadowOAM[letters[15].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+    shadowOAM[letters[15].oamIndex].attr1 = ATTR1_X(80) | ATTR1_TINY;
+    shadowOAM[letters[15].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(23, 0);
+
+    shadowOAM[letters[16].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+    shadowOAM[letters[16].oamIndex].attr1 = ATTR1_X(88) | ATTR1_TINY;
+    shadowOAM[letters[16].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(8, 0);
+
+    shadowOAM[letters[17].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+    shadowOAM[letters[17].oamIndex].attr1 = ATTR1_X(96) | ATTR1_TINY;
+    shadowOAM[letters[17].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(28, 0);
+
+    shadowOAM[letters[18].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+    shadowOAM[letters[18].oamIndex].attr1 = ATTR1_X(104) | ATTR1_TINY;
+    shadowOAM[letters[18].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(26, 0);
+
+    shadowOAM[letters[19].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+    shadowOAM[letters[19].oamIndex].attr1 = ATTR1_X(112) | ATTR1_TINY;
+    shadowOAM[letters[19].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(12, 0);
+
+    shadowOAM[letters[20].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+    shadowOAM[letters[20].oamIndex].attr1 = ATTR1_X(120) | ATTR1_TINY;
+    shadowOAM[letters[20].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(11, 0);
 }
 
 void win() {
@@ -521,7 +690,7 @@ void win() {
 void goToWin() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
     DMANow(3, &instructScreenTiles, &CHARBLOCK[0], instructScreenTilesLen/2);
-    DMANow(3, &instructScreenMap, &SCREENBLOCK[8], instructScreenMapLen/2);
+    DMANow(3, &instructScreenMap, &SCREENBLOCK[14], instructScreenMapLen/2);
     DMANow(3, &instructScreenPal, BG_PALETTE, instructScreenPalLen/2);
 
     hideSprites();
@@ -542,7 +711,7 @@ void lose() {
 void goToLose() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
     DMANow(3, &instructScreenTiles, &CHARBLOCK[0], instructScreenTilesLen/2);
-    DMANow(3, &instructScreenMap, &SCREENBLOCK[8], instructScreenMapLen/2);
+    DMANow(3, &instructScreenMap, &SCREENBLOCK[14], instructScreenMapLen/2);
     DMANow(3, &instructScreenPal, BG_PALETTE, instructScreenPalLen/2);
 
     hideSprites();

@@ -10,9 +10,11 @@ int hOff;
 int vOff;
 
 SPRITE dylan;
+SPRITE dylanPause;
+SPRITE grieverPause;
 SPRITE griever[10];
 SPRITE heart[3];
-SPRITE letters[28];
+SPRITE letters[32];
 SPRITE spear;
 typedef enum {UP, DOWN, RIGHT, LEFT} DIRECTION;
 
