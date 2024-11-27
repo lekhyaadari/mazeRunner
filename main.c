@@ -4,12 +4,15 @@
 #include "mode4.h"
 #include "sprites.h"
 #include "print.h"
+#include "digitalSound.h"
 //State Screen Maps and Spritesheet
 #include "startScreen.h"
 #include "mazeStart.h"
 #include "instructScreen.h"
 #include "pauseScreen.h"
 #include "pauseParallax.h"
+#include "loseScreen.h"
+#include "winScreen.h"
 #include "spritesheet.h"
 //Maze One Maps
 #include "mazeBackground.h"
@@ -26,6 +29,7 @@
 #include "cutscenesTiles.h"
 //Game One (maze one) Header File
 #include "game.h"
+#include "mazeRunnerOST.h"
 
 void initialize();
 
@@ -163,6 +167,9 @@ void initialize() {
     // REG_BG0HOFF = hOff;
     // REG_BG0VOFF = vOff;
 
+    setupSounds();
+    setupSoundInterrupts();
+
     goToStart();
 }
 
@@ -175,8 +182,12 @@ void start() {
     }
     if (BUTTON_PRESSED(BUTTON_START)) {
         initGame();
+        playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
         goToGameOne();
     }
+    // if(BUTTON_PRESSED(BUTTON_A)) {
+    //     goToCutsceneTwo();
+    // }
     
 }
 void goToStart() {
@@ -199,6 +210,7 @@ void instructions() {
 
     if (BUTTON_PRESSED(BUTTON_START)) {
         initGame();
+        playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
         goToGameOne();
     }
 }
@@ -226,19 +238,23 @@ void gameOne() {
     DMANow(3, shadowOAM, OAM, 128*4);
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
+        pauseSounds();
         goToPause();
         // winGame = 1; //used for testing
     }
 
     //TODO add timer for this
     if (BUTTON_PRESSED(BUTTON_B)) {
+        pauseSounds();
         goToViewMapOne();
     }
 
     if (winGame == 1) {
+        stopSounds();
         goToCutsceneOne();
     }
     if (loseGame == 1) {
+        stopSounds();
         goToLose();
     }
 
@@ -257,6 +273,7 @@ void goToGameOne() {
     DMANow(3, shadowOAM, OAM, 128*4);
 
     // initGame();
+    // playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
     state = GAMEONE;
 }
 
@@ -264,6 +281,7 @@ void viewMapOne() {
     waitForVBlank();
 
     if (viewTimer == 0) {
+        unpauseSounds();
         goToGameOne();
         viewTimer = 120;
     } else {
@@ -296,6 +314,7 @@ void cutsceneOne() {
 
     if (BUTTON_PRESSED(BUTTON_START)) {
         initGameTwo();
+        playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
         goToGameTwo();
     }
 
@@ -304,13 +323,14 @@ void cutsceneOne() {
     }
 
     if (BUTTON_PRESSED(BUTTON_RSHOULDER)) {
+        stopSounds();
         goToWin(); //just used for testing, won't be part of final submission
     }
 }
 void goToCutsceneOne() {
-    REG_DISPCTL = MODE(0) | BG_ENABLE(2);
-    DMANow(3, &cutscenesTilesTiles, &CHARBLOCK[3], cutscenesTilesTilesLen/2);
-    DMANow(3, &cutscenesMap, &SCREENBLOCK[8], cutscenesLen/2);
+    REG_DISPCTL = MODE(0) | BG_ENABLE(0);
+    DMANow(3, &cutscenesTilesTiles, &CHARBLOCK[0], cutscenesTilesTilesLen/2);
+    DMANow(3, &cutscenesMap, &SCREENBLOCK[14], cutscenesLen/2);
     DMANow(3, &cutscenesTilesPal, BG_PALETTE, cutscenesTilesPalLen/2);
 
     hideSprites();
@@ -335,19 +355,23 @@ void gameTwo() {
     DMANow(3, shadowOAM, OAM, 128*4);
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
-        // goToPause();
-        winGame = 1; //used for testing
+        pauseSounds();
+        goToPause();
+        // winGame = 1; //used for testing
     }
 
     //TODO add timer for this
     if (BUTTON_PRESSED(BUTTON_B)) {
+        pauseSounds();
         goToViewMapTwo();
     }
 
     if (winGame == 1) {
+        stopSounds();
         goToCutsceneTwo();
     }
     if (loseGame == 1) {
+        stopSounds();
         goToLose();
     }
 
@@ -373,6 +397,7 @@ void viewMapTwo() {
     waitForVBlank();
 
     if (viewTimer == 0) {
+        unpauseSounds();
         goToGameTwo();
         viewTimer = 120;
     } else {
@@ -400,11 +425,12 @@ void cutsceneTwo() {
     waitForVBlank();
 
     // SCREENBLOCK[14].tilemap[OFFSET(1, 1, 32)] = TILEMAP_ENTRY_TILEID(2);
-    volatile unsigned char dialogue[] = "STILL NO LUCK ESCAPING. AND YOU MISSED A NEW ARRIVAL TO THE GLADE! SHE EVEN BROUGHT ANTI VENOM SHOTS TO PROTECT AGAINST GRIEVERS. FOR ONE TIME USE, PRESS THE LEFT SHOULDER BUTTON AT ANY TIME AND YOU WILL BE ABLE TO PROTECT YOURSELF AGAINST ONE COLLISION WITH A GRIEVER. THIS IS YOUR LAST CHANCE TO FIND AN ESCAPE! GOOD LUCK! PRESS START TO BEGIN LEVEL THREE!";
+    volatile unsigned char dialogue[] = "STILL NO LUCK ESCAPING. AND   YOU MISSED A NEW ARRIVAL AT   THE GLADE! SHE EVEN BROUGHT   ANTI VENOM TO USE FOR YOUR    LAST TRY.    PRESS THE LEFT   SHOULDER BUTTON TO INJECT.    THIS WILL PROTECT YOU FROM A  SINGLE COLLISION WITH A       GRIEVER! PRESS START TO BEGIN LEVEL THREE. GOOD LUCK!";
     drawDialogue(dialogue);
 
     if (BUTTON_PRESSED(BUTTON_START)) {
         initGameTwo();
+        playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
         goToGameTwo();
     }
 
@@ -413,13 +439,14 @@ void cutsceneTwo() {
     }
 
     if (BUTTON_PRESSED(BUTTON_RSHOULDER)) {
+        stopSounds();
         goToWin(); //just used for testing, won't be part of final submission
     }
 }
 void goToCutsceneTwo() {
-    REG_DISPCTL = MODE(0) | BG_ENABLE(2);
-    DMANow(3, &cutscenesTilesTiles, &CHARBLOCK[3], cutscenesTilesTilesLen/2);
-    DMANow(3, &cutscenesMap, &SCREENBLOCK[8], cutscenesLen/2);
+    REG_DISPCTL = MODE(0) | BG_ENABLE(0);
+    DMANow(3, &cutscenesTilesTiles, &CHARBLOCK[0], cutscenesTilesTilesLen/2);
+    DMANow(3, &cutscenesMap, &SCREENBLOCK[14], cutscenesLen/2);
     DMANow(3, &cutscenesTilesPal, BG_PALETTE, cutscenesTilesPalLen/2);
 
     hideSprites();
@@ -431,7 +458,6 @@ void goToCutsceneTwo() {
     heartActive = 0;
 
     state = CUTSCENETWO;
-
 }
 
 void gameThree() {
@@ -445,19 +471,23 @@ void gameThree() {
     DMANow(3, shadowOAM, OAM, 128*4);
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
+        pauseSounds();
         goToPause();
         // winGame = 1; //used for testing
     }
 
     //TODO add timer for this
     if (BUTTON_PRESSED(BUTTON_B)) {
+        pauseSounds();
         goToViewMapThree();
     }
 
     if (winGame == 1) {
+        stopSounds();
         goToWin();
     }
     if (loseGame == 1) {
+        stopSounds();
         goToLose();
     }
 }
@@ -482,6 +512,7 @@ void viewMapThree() {
     waitForVBlank();
 
     if (viewTimer == 0) {
+        unpauseSounds();
         goToGameThree();
         viewTimer = 120;
     } else {
@@ -538,6 +569,7 @@ void goToPause() {
     hOffStart = 0;
     vOffStart = 0;
 
+    // pauseSounds();
     state = PAUSE;
 }
 void initPauseSprites() {
@@ -689,9 +721,9 @@ void win() {
 }
 void goToWin() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
-    DMANow(3, &instructScreenTiles, &CHARBLOCK[0], instructScreenTilesLen/2);
-    DMANow(3, &instructScreenMap, &SCREENBLOCK[14], instructScreenMapLen/2);
-    DMANow(3, &instructScreenPal, BG_PALETTE, instructScreenPalLen/2);
+    DMANow(3, &winScreenTiles, &CHARBLOCK[0], winScreenTilesLen/2);
+    DMANow(3, &winScreenMap, &SCREENBLOCK[14], winScreenMapLen/2);
+    DMANow(3, &winScreenPal, BG_PALETTE, winScreenPalLen/2);
 
     hideSprites();
     waitForVBlank();
@@ -710,9 +742,9 @@ void lose() {
 }
 void goToLose() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
-    DMANow(3, &instructScreenTiles, &CHARBLOCK[0], instructScreenTilesLen/2);
-    DMANow(3, &instructScreenMap, &SCREENBLOCK[14], instructScreenMapLen/2);
-    DMANow(3, &instructScreenPal, BG_PALETTE, instructScreenPalLen/2);
+    DMANow(3, &loseScreenTiles, &CHARBLOCK[0], loseScreenTilesLen/2);
+    DMANow(3, &loseScreenMap, &SCREENBLOCK[14], loseScreenMapLen/2);
+    DMANow(3, &loseScreenPal, BG_PALETTE, loseScreenPalLen/2);
 
     hideSprites();
     waitForVBlank();

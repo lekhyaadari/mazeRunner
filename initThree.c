@@ -15,6 +15,7 @@ void initGameThree() {
     loseGame = 0;
     winGame = 0;
     heartActive = 0;
+    venomActive = 0;
     initDylanThree();
     initGrieversThree();
     initSpearThree();

@@ -46,6 +46,20 @@ void drawDylan() {
                 shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(1) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 4);
             }
         }
+        if (venomActive) {
+            shadowOAM[dylan.oamIndex].attr0 = ATTR0_Y(dylan.y - vOff) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+            shadowOAM[dylan.oamIndex].attr1 = ATTR1_X(dylan.x - hOff) | ATTR1_SMALL;
+            shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(2) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 0);
+            if (dylan.direction == RIGHT) {
+                shadowOAM[dylan.oamIndex].attr1 = ATTR1_HFLIP | ATTR1_X(dylan.x - hOff) | ATTR1_SMALL;
+            }
+            if (dylan.direction == UP) {
+                shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(1) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 2);
+            }
+            if (dylan.direction == DOWN) {
+                shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(1) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 4);
+            }
+        }
     }
 }
 

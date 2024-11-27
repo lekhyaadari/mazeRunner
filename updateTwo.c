@@ -5,6 +5,8 @@
 #include "mode0.h"
 #include "spritesheet.h"
 #include "mazeTwoCollision.h"
+#include "digitalSound.h"
+#include "shotSound.h"
 
 inline unsigned char colorAt(int x, int y){
     return ((unsigned char *) mazeTwoCollisionBitmap) [OFFSET(x, y, 512)];
@@ -16,6 +18,8 @@ void updateGameTwo() {
     updateGrieversTwo();
     updateSpearTwo();
     updateHeartsTwo();
+    setupSoundInterrupts();
+    setupSounds();
 }
 
 void updateDylanTwo() {
@@ -223,6 +227,7 @@ void updateSpearTwo() {
     // spear.x = dylan.x + 2;
     // spear.y = dylan.y + 2;
     if (BUTTON_PRESSED(BUTTON_A)) {
+        playSoundB(shotSound_data, shotSound_length, 0);
         launchSpearTwo();
     }
 }

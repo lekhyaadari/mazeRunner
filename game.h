@@ -30,6 +30,7 @@ int minutes;
 int minOnes;
 int secTens;
 int secOnes;
+int venomActive;
 
 //Game One
 void initGame();

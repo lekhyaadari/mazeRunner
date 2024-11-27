@@ -4,6 +4,8 @@
 #include "mode0.h"
 #include "spritesheet.h"
 #include "mazeThreeCollision.h"
+#include "digitalSound.h"
+#include "shotSound.h"
 
 inline unsigned char colorAt(int x, int y){
     return ((unsigned char *) mazeThreeCollisionBitmap) [OFFSET(x, y, 512)];
@@ -16,6 +18,8 @@ void updateGameThree() {
     updateSpearThree();
     updateHeartsThree();
     updateLettersThree();
+    setupSoundInterrupts();
+    setupSounds();
 }
 
 void updateDylanThree() {
@@ -92,6 +96,10 @@ void updateDylanThree() {
             dylan.active = 1;
             dylan.erased = 0;
             dylan.hide = 0;
+    }
+
+    if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
+        venomActive = 1;
     }
 }
 
@@ -173,10 +181,20 @@ void updateGrieversThree() {
         }
 
         if (collision(dylan.x, dylan.y, dylan.width, dylan.height, griever[i].x, griever[i].y, griever[i].width, griever[i].height)) {
-            dylan.active = 0;
-            dylan.erased = 1;
-            dylan.hide = 1;
-            loseGame = 1;
+            if (venomActive) {
+                griever[i].x = 0;
+                griever[i].y = 0;
+                griever[i].active = 0;
+                griever[i].erased = 1;
+                griever[i].hide = 1;
+                griever[i].xVel = 0;
+                griever[i].yVel = 0;
+            } else {
+                dylan.active = 0;
+                dylan.erased = 1;
+                dylan.hide = 1;
+                loseGame = 1;
+            }
         }
 
         if (collision(spear.x, spear.y, spear.width, spear.height, griever[i].x, griever[i].y, griever[i].width, griever[i].height)) {
@@ -230,6 +248,7 @@ void updateSpearThree() {
 
     spear.direction = dylan.direction;
     if (BUTTON_PRESSED(BUTTON_A)) {
+        playSoundB(shotSound_data, shotSound_length, 0);
         launchSpear();
     }
 }
