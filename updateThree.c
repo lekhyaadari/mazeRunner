@@ -17,7 +17,7 @@ void updateGameThree() {
     updateGrieversThree();
     updateSpearThree();
     updateHeartsThree();
-    updateLettersThree();
+    // updateLettersThree();q
     setupSoundInterrupts();
     setupSounds();
 }
@@ -87,7 +87,7 @@ void updateDylanThree() {
     if (vOff > (MAPTWOHEIGHT - SCREENHEIGHT)) vOff = (MAPTWOHEIGHT - SCREENHEIGHT);
 
     //either go to next level or win
-    if (collision(dylan.x, dylan.y, dylan.width, dylan.height, 254, 508, 32, 4)) {
+    if (collision(dylan.x, dylan.y, dylan.width, dylan.height, 508, 222, 8, 52)) {
         winGame = 1;
         hideSprites();
     }
@@ -121,14 +121,14 @@ void updateGrieversThree() {
 
             if (griever[i].direction == RIGHT) {
                 griever[i].x += griever[i].xVel;
-                if ((colorAt(rightX + 1, topY) == 0) || (colorAt(rightX + 1, bottomY) == 0) || (colorAt(rightX + 1, topY + 8) == 0)) {
+                if ((colorAt(rightX + 1, topY) == 0) && (colorAt(rightX + 1, bottomY) == 0) && (colorAt(rightX + 1, topY + 8) == 0)) {
                     // mgba_printf("x, y is: %d, %d", griever[i].x, griever[i].y);
                     // griever[i].direction = LEFT;
                     griever[i].direction = rand() % 4;
                 }
             } else if (griever[i].direction == LEFT) {
                 griever[i].x -= griever[i].xVel;
-                if ((colorAt(leftX - 1, topY) == 0) || (colorAt(leftX - 1, bottomY) == 0) || (colorAt(leftX - 1, topY + 8) == 0)) {
+                if ((colorAt(leftX - 1, topY) == 0) && (colorAt(leftX - 1, bottomY) == 0) && (colorAt(leftX - 1, topY + 8) == 0)) {
                     // mgba_printf("x, y is: %d, %d", griever[i].x, griever[i].y);
                     // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;
@@ -136,14 +136,14 @@ void updateGrieversThree() {
             }
             if (griever[i].direction == UP) {
                 griever[i].y -= griever[i].yVel;
-                if ((colorAt(leftX, topY - 1) == 0) || (colorAt(rightX, topY - 1) == 0) || (colorAt(leftX + 8, topY - 1) == 0)) {
+                if ((colorAt(leftX, topY - 1) == 0) && (colorAt(rightX, topY - 1) == 0)  && (colorAt(leftX + 8, topY - 1) == 0)) {
                     // mgba_printf("x, y is: %d, %d", griever[i].x, griever[i].y);
                     // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;
                 }
             } else if (griever[i].direction == DOWN) {
                 griever[i].y += griever[i].yVel;
-                if ((colorAt(leftX, bottomY + 1) == 0) || (colorAt(rightX, bottomY + 1) == 0) || (colorAt(leftX + 8, bottomY + 1) == 0)) {
+                if ((colorAt(leftX, bottomY + 1) == 0) && (colorAt(rightX, bottomY + 1) == 0) && (colorAt(leftX + 8, bottomY + 1) == 0)) {
                     // mgba_printf("x, y is: %d, %d", griever[i].x, griever[i].y);
                     // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;

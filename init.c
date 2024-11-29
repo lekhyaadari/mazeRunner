@@ -123,6 +123,7 @@ void initNewGriever() {
             griever[i].hide = 0;
             griever[i].oamIndex = j;
             j++;
+            break;
         }
     }
 }

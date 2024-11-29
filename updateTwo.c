@@ -18,6 +18,7 @@ void updateGameTwo() {
     updateGrieversTwo();
     updateSpearTwo();
     updateHeartsTwo();
+    updateLettersTwo();
     setupSoundInterrupts();
     setupSounds();
 }
@@ -30,28 +31,28 @@ void updateDylanTwo() {
 
     dylan.isAnimating = 0;
 
-    if (BUTTON_HELD(BUTTON_RIGHT) && colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) && (dylan.x + dylan.width < 512)) {
+    if (BUTTON_HELD(BUTTON_RIGHT) && colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) && (dylan.x + dylan.width < 512) && colorAt(rightX + dylan.xVel, topY + 8)) {
         dylan.isAnimating = 1;
         // if (colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) ) {
             dylan.x += dylan.xVel;
             dylan.direction = RIGHT;
         // }
     }
-    if (BUTTON_HELD(BUTTON_LEFT) && colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) && (dylan.x > 0)) {
+    if (BUTTON_HELD(BUTTON_LEFT) && colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) && (dylan.x > 0) && colorAt(leftX - dylan.xVel, topY + 8)) {
         dylan.isAnimating = 1;
         // if (colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) ) {
             dylan.x -= dylan.xVel;
             dylan.direction = LEFT;
         // }
     }
-    if (BUTTON_HELD(BUTTON_UP) && colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) && (dylan.y > 0)) {
+    if (BUTTON_HELD(BUTTON_UP) && colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) && (dylan.y > 0) && colorAt(leftX + 8, topY - dylan.yVel)) {
         dylan.isAnimating = 1;
         // if (colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) ) {
             dylan.y -= dylan.yVel;
             dylan.direction = UP;
         // }
     }
-    if (BUTTON_HELD(BUTTON_DOWN) && colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) && (dylan.y + dylan.height < 512)) {
+    if (BUTTON_HELD(BUTTON_DOWN) && colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) && (dylan.y + dylan.height < 512) && colorAt(leftX + 8, bottomY + dylan.yVel)) {
         dylan.isAnimating = 1;
         // if (colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) ) {
             dylan.y += dylan.yVel;
@@ -114,26 +115,26 @@ void updateGrieversTwo() {
 
             if (griever[i].direction == RIGHT) {
                 griever[i].x += griever[i].xVel;
-                if ((colorAt(rightX + 1, topY) == 0) && (colorAt(rightX + 1, bottomY) == 0)) {
+                if ((colorAt(rightX + 1, topY) == 0) && (colorAt(rightX + 1, bottomY) == 0) && (colorAt(rightX + 1, topY + 8) == 0)) {
                     // griever[i].direction = LEFT;
                     griever[i].direction = rand() % 4;
                 }
             } else if (griever[i].direction == LEFT) {
                 griever[i].x -= griever[i].xVel;
-                if ((colorAt(leftX - 1, topY) == 0) && (colorAt(leftX - 1, bottomY) == 0)) {
+                if ((colorAt(leftX - 1, topY) == 0) && (colorAt(leftX - 1, bottomY) == 0) && (colorAt(leftX - 1, topY + 8) == 0)) {
                     // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;
                 }
             }
             if (griever[i].direction == UP) {
                 griever[i].y -= griever[i].yVel;
-                if ((colorAt(leftX, topY - 1) == 0) && (colorAt(rightX, topY - 1) == 0)) {
+                if ((colorAt(leftX, topY - 1) == 0) && (colorAt(rightX, topY - 1) == 0)  && (colorAt(leftX + 8, topY - 1) == 0)) {
                     // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;
                 }
             } else if (griever[i].direction == DOWN) {
                 griever[i].y += griever[i].yVel;
-                if ((colorAt(leftX, bottomY + 1) == 0) && (colorAt(rightX, bottomY + 1) == 0)) {
+                if ((colorAt(leftX, bottomY + 1) == 0) && (colorAt(rightX, bottomY + 1) == 0) && (colorAt(leftX + 8, bottomY + 1) == 0)) {
                     // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;
                 }
@@ -275,7 +276,7 @@ void updateHeartsTwo() {
 void updateLettersTwo() {
     if (gameTimer == 0) {
         loseGame = 1;
-        gameTimer = 7200;
+        gameTimer = 5400;
     } else {
         gameTimer--;
     }

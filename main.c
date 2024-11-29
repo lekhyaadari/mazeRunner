@@ -100,6 +100,7 @@ int vOffStart;
 //win and lose game
 int winGame;
 int loseGame;
+int level;
 
 int main() {
     
@@ -122,6 +123,7 @@ int main() {
                 instructions();
                 break;
             case GAMEONE:
+                level = 1;
                 gameOne();
                 break;
             case VIEWONE:
@@ -131,6 +133,7 @@ int main() {
                 cutsceneOne();
                 break;
             case GAMETWO:
+                level = 2;
                 gameTwo();
                 break;
             case VIEWTWO:
@@ -140,6 +143,7 @@ int main() {
                 cutsceneTwo();
                 break;
             case GAMETHREE:
+                level = 3;
                 gameThree();
                 break;
             case VIEWTHREE:
@@ -313,16 +317,19 @@ void cutsceneOne() {
     drawDialogue(dialogue);
 
     if (BUTTON_PRESSED(BUTTON_START)) {
+        currentIndex = 0;
         initGameTwo();
         playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
         goToGameTwo();
     }
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
+        currentIndex = 0;
         goToStart();
     }
 
     if (BUTTON_PRESSED(BUTTON_RSHOULDER)) {
+        currentIndex = 0;
         stopSounds();
         goToWin(); //just used for testing, won't be part of final submission
     }
@@ -429,9 +436,9 @@ void cutsceneTwo() {
     drawDialogue(dialogue);
 
     if (BUTTON_PRESSED(BUTTON_START)) {
-        initGameTwo();
+        initGameThree();
         playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
-        goToGameTwo();
+        goToGameThree();
     }
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
@@ -456,12 +463,13 @@ void goToCutsceneTwo() {
     winGame = 0;
     loseGame = 0;
     heartActive = 0;
+    currentIndex = 0;
 
     state = CUTSCENETWO;
 }
 
 void gameThree() {
-    // updateGameThree();
+    updateGameThree();
     drawGame();
     REG_BG1HOFF = hOff;
     REG_BG1VOFF = vOff;
@@ -504,7 +512,7 @@ void goToGameThree() {
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
-    initGameThree();
+    // initGameThree();
     state = GAMETHREE;
 }
 
@@ -541,7 +549,13 @@ void pause() {
     drawPauseSprites();
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
-        goToGameOne();
+        if (level == 1) {
+            goToGameOne();
+        } else if (level == 2) {
+            goToGameTwo();
+        } else if (level == 3) {
+            goToGameThree();
+        }
     }
     if (BUTTON_PRESSED(BUTTON_START)) {
         goToStart();
@@ -757,6 +771,7 @@ void goToLose() {
 //animate dialogue / words in the cutscene using tilemap modification
 void drawDialogue(volatile unsigned char* dialogue) {
     int frameCounter = 0;
+    //currentIndex = 0;
 
     if (timeUntilNextLetter == 0) {
         if (dialogue[currentIndex] != '\0') {
