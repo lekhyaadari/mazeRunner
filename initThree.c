@@ -178,7 +178,7 @@ void initSpearThree() {
 
 void initHeartsThree() {
     int j = 18;
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 0; i++) {
         heart[i].x = 234;
         heart[i].y = 36;
         heart[i].xVel = 0;
@@ -194,7 +194,6 @@ void initHeartsThree() {
         heart[i].erased = 0;
         heart[i].hide = 0;
         heart[i].oamIndex = j;
-        j++;
     }
 }
 

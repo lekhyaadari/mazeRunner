@@ -244,7 +244,7 @@ void launchSpearTwo() {
 }
 
 void updateHeartsTwo() {
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 1; i++) {
         if (collision(dylan.x, dylan.y, dylan.width, dylan.height, heart[i].x, heart[i].y, heart[i].width, heart[i].height)) {
             heart[i].active = 0;
             heart[i].erased = 1;

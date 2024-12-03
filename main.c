@@ -555,6 +555,7 @@ void pause() {
         }
     }
     if (BUTTON_PRESSED(BUTTON_START)) {
+        REG_BG0HOFF = 0;
         goToStart();
     }
 }
