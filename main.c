@@ -110,6 +110,7 @@ int hOff;
 int vOff;
 int hOffStart;
 int vOffStart;
+int hOffStartTwo;
 
 //Win and Lose Game Variables
 int winGame;
@@ -531,14 +532,17 @@ void goToViewMapThree() {
 
 void pause() {
     hOffStart += 1;
+    hOffStartTwo -= 1;
     updatePauseSprites();
     drawPauseSprites();
 
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
     REG_BG2HOFF = hOffStart;
+    REG_BG0HOFF = hOffStartTwo;
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
+        REG_BG0HOFF = 0;
         unpauseSounds();
         if (level == 1) {
             goToGameOne();
@@ -573,6 +577,7 @@ void goToPause() {
 
     hOffStart = 0;
     vOffStart = 0;
+    hOffStartTwo = 0;
 
     state = PAUSE;
 }
