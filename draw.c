@@ -121,73 +121,79 @@ void drawHearts() {
 }
 
 void drawTimer() {
-    //T
-    shadowOAM[letters[1].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[1].oamIndex].attr1 = ATTR1_X(2) | ATTR1_TINY;
-    shadowOAM[letters[1].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(27, 0);
+    if (letters[1].hide) {
+        for (int i = 0; i < 15; i++) {
+            shadowOAM[letters[i].oamIndex].attr0 = ATTR0_HIDE;
+        }
+    } else  {
+        //T
+        shadowOAM[letters[1].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[1].oamIndex].attr1 = ATTR1_X(2) | ATTR1_TINY;
+        shadowOAM[letters[1].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(27, 0);
 
-    //I
-    shadowOAM[letters[2].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[2].oamIndex].attr1 = ATTR1_X(10) | ATTR1_TINY;
-    shadowOAM[letters[2].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(16, 0);
+        //I
+        shadowOAM[letters[2].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[2].oamIndex].attr1 = ATTR1_X(10) | ATTR1_TINY;
+        shadowOAM[letters[2].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(16, 0);
 
-    //M
-    shadowOAM[letters[3].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[3].oamIndex].attr1 = ATTR1_X(18) | ATTR1_TINY;
-    shadowOAM[letters[3].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(20, 0);
+        //M
+        shadowOAM[letters[3].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[3].oamIndex].attr1 = ATTR1_X(18) | ATTR1_TINY;
+        shadowOAM[letters[3].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(20, 0);
 
-    //E
-    shadowOAM[letters[4].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[4].oamIndex].attr1 = ATTR1_X(26) | ATTR1_TINY;
-    shadowOAM[letters[4].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(12, 0);
+        //E
+        shadowOAM[letters[4].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[4].oamIndex].attr1 = ATTR1_X(26) | ATTR1_TINY;
+        shadowOAM[letters[4].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(12, 0);
 
-    //L
-    shadowOAM[letters[5].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[5].oamIndex].attr1 = ATTR1_X(42) | ATTR1_TINY;
-    shadowOAM[letters[5].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(19, 0);
+        //L
+        shadowOAM[letters[5].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[5].oamIndex].attr1 = ATTR1_X(42) | ATTR1_TINY;
+        shadowOAM[letters[5].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(19, 0);
 
-    //E
-    shadowOAM[letters[6].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[6].oamIndex].attr1 = ATTR1_X(50) | ATTR1_TINY;
-    shadowOAM[letters[6].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(12, 0);
+        //E
+        shadowOAM[letters[6].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[6].oamIndex].attr1 = ATTR1_X(50) | ATTR1_TINY;
+        shadowOAM[letters[6].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(12, 0);
 
-    //F
-    shadowOAM[letters[7].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[7].oamIndex].attr1 = ATTR1_X(58) | ATTR1_TINY;
-    shadowOAM[letters[7].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(13, 0);
+        //F
+        shadowOAM[letters[7].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[7].oamIndex].attr1 = ATTR1_X(58) | ATTR1_TINY;
+        shadowOAM[letters[7].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(13, 0);
 
-    //T
-    shadowOAM[letters[8].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[8].oamIndex].attr1 = ATTR1_X(66) | ATTR1_TINY;
-    shadowOAM[letters[8].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(27, 0);
+        //T
+        shadowOAM[letters[8].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[8].oamIndex].attr1 = ATTR1_X(66) | ATTR1_TINY;
+        shadowOAM[letters[8].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(27, 0);
 
-    //:
-    shadowOAM[letters[9].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[9].oamIndex].attr1 = ATTR1_X(74) | ATTR1_TINY;
-    shadowOAM[letters[9].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(18, 1);
+        //:
+        shadowOAM[letters[9].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[9].oamIndex].attr1 = ATTR1_X(74) | ATTR1_TINY;
+        shadowOAM[letters[9].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(18, 1);
 
-    // //(0)0 : 00
-    // shadowOAM[letters[10].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    // shadowOAM[letters[10].oamIndex].attr1 = ATTR1_X(90) | ATTR1_TINY;
-    // shadowOAM[letters[10].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(8, 1);
+        // //(0)0 : 00
+        // shadowOAM[letters[10].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        // shadowOAM[letters[10].oamIndex].attr1 = ATTR1_X(90) | ATTR1_TINY;
+        // shadowOAM[letters[10].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(8, 1);
 
-    //0(0) : 00
-    shadowOAM[letters[11].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[11].oamIndex].attr1 = ATTR1_X(90) | ATTR1_TINY;
-    shadowOAM[letters[11].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(8 + minOnes, 1);
+        //0(0) : 00
+        shadowOAM[letters[11].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[11].oamIndex].attr1 = ATTR1_X(90) | ATTR1_TINY;
+        shadowOAM[letters[11].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(8 + minOnes, 1);
 
-    //:
-    shadowOAM[letters[12].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[12].oamIndex].attr1 = ATTR1_X(98) | ATTR1_TINY;
-    shadowOAM[letters[12].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(18, 1);
+        //:
+        shadowOAM[letters[12].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[12].oamIndex].attr1 = ATTR1_X(98) | ATTR1_TINY;
+        shadowOAM[letters[12].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(18, 1);
 
-    //00 : (0)0
-    shadowOAM[letters[13].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[13].oamIndex].attr1 = ATTR1_X(106) | ATTR1_TINY;
-    shadowOAM[letters[13].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(8 + secTens, 1);
+        //00 : (0)0
+        shadowOAM[letters[13].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[13].oamIndex].attr1 = ATTR1_X(106) | ATTR1_TINY;
+        shadowOAM[letters[13].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(8 + secTens, 1);
 
-    //00 : 0(0)
-    shadowOAM[letters[14].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[14].oamIndex].attr1 = ATTR1_X(114) | ATTR1_TINY;
-    shadowOAM[letters[14].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(8 + secOnes, 1);
+        //00 : 0(0)
+        shadowOAM[letters[14].oamIndex].attr0 = ATTR0_Y(2) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
+        shadowOAM[letters[14].oamIndex].attr1 = ATTR1_X(114) | ATTR1_TINY;
+        shadowOAM[letters[14].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(8 + secOnes, 1);
+    }
 }

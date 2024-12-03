@@ -170,7 +170,7 @@ void initSpearThree() {
     spear.direction = dylan.direction;
     spear.active = 0;
     spear.hide = 1;
-    spear.oamIndex = 19;
+    spear.oamIndex = 20;
     spear.width = 8;
     spear.height = 8;
     launchSpearBool = 0;
@@ -205,7 +205,7 @@ void initLettersThree() {
     letters[1].active = 0;
     letters[1].active = 1;
     letters[1].hide = 0;
-    letters[1].oamIndex = 20;
+    letters[1].oamIndex = 34;
 
     // Letter I
     letters[2].width = 8;

@@ -24,6 +24,8 @@
 //Maze Three Maps
 #include "mazeThree.h"
 #include "ViewMapThree.h"
+//Bonus Maze
+#include "mazeBonus.h"
 //Cutscene Maps
 #include "cutscenes.h"
 #include "cutscenesTiles.h"
@@ -173,7 +175,8 @@ int main() {
                 bonusCutscene();
                 break;
             case GAMEBONUS:
-                bonusGameO();
+                level = 4;
+                bonusGame();
                 break;
         }
     }
@@ -228,9 +231,10 @@ void instructions() {
     waitForVBlank();
 
     if (BUTTON_PRESSED(BUTTON_START)) {
-        initGame();
+        // initGame();
         playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
-        goToGameOne();
+        // goToGameOne();
+        goToBonusCutscene();
     }
 }
 void goToInstructions() {
@@ -759,7 +763,7 @@ void goToLose() {
 void bonusCutscene() {
     waitForVBlank();
 
-    volatile unsigned char dialogue[] = "";
+    volatile unsigned char dialogue[] = "OMG YOU FOUND THE HIDDEN      LEVEL! TRY TO ESCAPE THIS ONE WITH NO ANTI VENOM. HIDDEN    HEARTS. OR BEING ABLE TO SEE  THE MAP. HOWEVER YOU CAN      STILL USE YOUR SPEAR! PRESS   START TO BEGIN OR SELECT TO   GO BACK TO START SCREEN. GOOD LUCK!";
     drawDialogue(dialogue);
 
     if (BUTTON_PRESSED(BUTTON_START)) {
@@ -816,14 +820,12 @@ void bonusGame() {
 void goToBonusGame() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(1) | SPRITE_ENABLE;
     DMANow(3, &mazeBackgroundTiles, &CHARBLOCK[2], mazeBackgroundTilesLen/2);
-    //TODO make bonus level map
-    // DMANow(3, &mazeThreeMap, &SCREENBLOCK[10], mazeThreeLen/2);
+    DMANow(3, &mazeBonusMap, &SCREENBLOCK[10], mazeBonusLen/2);
     DMANow(3, &mazeBackgroundPal, BG_PALETTE, mazeBackgroundPalLen/2);
 
     DMANow(3, spritesheetTiles, &CHARBLOCK[4], spritesheetTilesLen/2);
     DMANow(3, spritesheetPal, SPRITE_PAL, spritesheetPalLen/2);
 
-    hideSprites();
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 

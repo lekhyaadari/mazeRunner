@@ -16,17 +16,18 @@ void initGameBonus() {
     initDylanBonus();
     initGrieversBonus();
     initSpearBonus();
+    deInitSprites();
 }
 
 void initDylanBonus() {
-    // dylan.x = 488;
-    // dylan.y = 169;
+    dylan.x = 240;
+    dylan.y = 250;
     dylan.xVel = 1;
     dylan.yVel = 1;
     dylan.width = 16;
     dylan.height = 16;
     dylan.timeUntilNextFrame = 6;
-    dylan.direction = RIGHT;
+    dylan.direction = LEFT;
     dylan.isAnimating = 0;
     dylan.currentFrame = 0;
     dylan.numFrames = 4;
@@ -39,8 +40,8 @@ void initDylanBonus() {
 void initGrieversBonus() {
     int j = 1;
     for (int i = 0; i < 14; i++) {
-        // griever[i].x = 236;
-        // griever[i].y = 71;
+        griever[i].x = rand() % 496;
+        griever[i].y = rand() % 496;
         griever[i].xVel = 1;
         griever[i].yVel = 1;
         griever[i].width = 16;
@@ -58,7 +59,7 @@ void initGrieversBonus() {
     }
 }
 
-void initSpearTwo() {
+void initSpearBonus() {
     spear.x = dylan.x;
     spear.y = dylan.y;
     spear.xVel = 0;
@@ -70,4 +71,15 @@ void initSpearTwo() {
     spear.width = 8;
     spear.height = 8;
     launchSpearBool = 0;
+}
+
+void deInitSprites() {
+    int k = 21;
+    for (int i = 0; i < 15; i++) {
+        letters[i].oamIndex = k;
+        letters[i].active = 0;
+        letters[i].hide = 1;
+        letters[i].erased = 1;
+        k++;
+    }
 }

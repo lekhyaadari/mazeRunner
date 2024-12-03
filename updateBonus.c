@@ -6,9 +6,10 @@
 #include "spritesheet.h"
 #include "digitalSound.h"
 #include "shotSound.h"
+#include "bonusMazeCollision.h"
 
 inline unsigned char colorAt(int x, int y){
-    return ((unsigned char *) mazeBonusCollisionBitmap) [OFFSET(x, y, 512)];
+    return ((unsigned char *) bonusMazeCollisionBitmap) [OFFSET(x, y, 512)];
 
 }
 
@@ -74,8 +75,7 @@ void updateDylanBonus() {
     if (vOff > (MAPTWOHEIGHT - SCREENHEIGHT)) vOff = (MAPTWOHEIGHT - SCREENHEIGHT);
 
     //win bonus level
-    //TODO fix this end game collision
-    if (collision(dylan.x, dylan.y, dylan.width, dylan.height, 0, 248, 4, 32)) {
+    if (collision(dylan.x, dylan.y, dylan.width, dylan.height, 230, 0, 64, 4)) {
         winGame = 1;
         hideSprites();
     }
