@@ -97,7 +97,7 @@ void updateDylanThree() {
 }
 
 void updateGrieversThree() {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 16; i++) {
         int leftX = griever[i].x;
         int rightX = griever[i].x + griever[i].width - 1;
         int topY = griever[i].y;
@@ -114,23 +114,23 @@ void updateGrieversThree() {
 
             if (griever[i].direction == RIGHT) {
                 griever[i].x += griever[i].xVel;
-                if ((colorAt(rightX + 1, topY) == 0) && (colorAt(rightX + 1, bottomY) == 0) && (colorAt(rightX + 1, topY + 8) == 0)) {
+                if ((colorAt(rightX + 1, topY) == 0) && (colorAt(rightX + 1, bottomY) == 0) || (colorAt(rightX + 1, topY + 8) == 0)) {
                     griever[i].direction = rand() % 4;
                 }
             } else if (griever[i].direction == LEFT) {
                 griever[i].x -= griever[i].xVel;
-                if ((colorAt(leftX - 1, topY) == 0) && (colorAt(leftX - 1, bottomY) == 0) && (colorAt(leftX - 1, topY + 8) == 0)) {
+                if ((colorAt(leftX - 1, topY) == 0) && (colorAt(leftX - 1, bottomY) == 0) || (colorAt(leftX - 1, topY + 8) == 0)) {
                     griever[i].direction = rand() % 4;
                 }
             }
             if (griever[i].direction == UP) {
                 griever[i].y -= griever[i].yVel;
-                if ((colorAt(leftX, topY - 1) == 0) && (colorAt(rightX, topY - 1) == 0)  && (colorAt(leftX + 8, topY - 1) == 0)) {
+                if ((colorAt(leftX, topY - 1) == 0) && (colorAt(rightX, topY - 1) == 0)  || (colorAt(leftX + 8, topY - 1) == 0)) {
                     griever[i].direction = rand() % 4;
                 }
             } else if (griever[i].direction == DOWN) {
                 griever[i].y += griever[i].yVel;
-                if ((colorAt(leftX, bottomY + 1) == 0) && (colorAt(rightX, bottomY + 1) == 0) && (colorAt(leftX + 8, bottomY + 1) == 0)) {
+                if ((colorAt(leftX, bottomY + 1) == 0) && (colorAt(rightX, bottomY + 1) == 0) || (colorAt(leftX + 8, bottomY + 1) == 0)) {
                     griever[i].direction = rand() % 4;
                 }
             }

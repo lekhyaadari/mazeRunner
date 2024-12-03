@@ -1,3 +1,4 @@
+//macros
 #include "sprites.h"
 #define MAPONEWIDTH 256
 #define MAPONEHEIGHT 256
@@ -6,9 +7,11 @@
 #define MAPTWOWIDTH 512
 #define MAPTWOHEIGHT 512
 
+//surrogate variables
 int hOff;
 int vOff;
 
+//sprites used
 SPRITE dylan;
 SPRITE dylanPause;
 SPRITE grieverPause;
@@ -16,8 +19,10 @@ SPRITE griever[10];
 SPRITE heart[3];
 SPRITE letters[20];
 SPRITE spear;
+//direction enum
 typedef enum {UP, DOWN, RIGHT, LEFT} DIRECTION;
 
+//int variables used
 int grieverInsideMaze;
 int spearInsideMaze;
 int winGame;
@@ -32,7 +37,7 @@ int secTens;
 int secOnes;
 int venomActive;
 
-//Game One
+//Game One Function Prototypes
 void initGame();
 void updateGame();
 void drawGame();
@@ -54,7 +59,7 @@ void initTimer();
 void updateTimer();
 void drawTimer();
 
-//Game Two
+//Game Two Function Prototypes
 void initGameTwo();
 void initDylanTwo();
 void initGrieversTwo();
@@ -69,7 +74,7 @@ void updateHeartsTwo();
 void updateLettersTwo();
 void launchSpearTwo();
 
-//Game Three Inits
+//Game Three Function Prototypes
 void initGameThree();
 void initDylanThree();
 void initGrieversThree();
@@ -84,7 +89,7 @@ void updateHeartsThree();
 void updateLettersThree();
 void launchSpearThree();
 
-//Hidden Level
+//Hidden Level Function Prototypes
 void initGameBonus();
 void initDylanBonus();
 void initGrieversBonus();

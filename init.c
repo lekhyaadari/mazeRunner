@@ -1,3 +1,6 @@
+//ALL COMMENTS WITHIN INIT.C AND UPDATE.C APPLY TO OTHER LEVEL SOURCE FILES AS WELL
+//I DID NOT WANT TO REPEAT COMMENTS SO THESE ARE ONLY WITHIN THESE FILES
+//header file inclusions
 #include "gba.h"
 #include "sprites.h"
 #include "game.h"
@@ -5,6 +8,7 @@
 #include "spritesheet.h"
 #include "mazeOneCollision.h"
 
+//initialize first level function and int variables
 void initGame() {
     hideSprites();
     hOff = 0;
@@ -23,6 +27,7 @@ void initGame() {
     initTimer();
 }
 
+//initialize level one dylan's position
 void initDylan() {
     dylan.x = 230;
     dylan.y = 24;
@@ -41,6 +46,7 @@ void initDylan() {
     dylan.oamIndex = 0;
 }
 
+//initialize first three greivers in level one
 void initGriever() {
     //griever 1
     griever[0].x = 10;
@@ -93,6 +99,7 @@ void initGriever() {
     griever[2].hide = 0;
     griever[2].oamIndex = 3;
 
+    //hide all other grievers
     int j = 4;
     for (int i = 3; i < 10; i++) {
         griever[i].active = 0;
@@ -103,12 +110,13 @@ void initGriever() {
     }
 }
 
+//initialize new griever after one is killed
 void initNewGriever() {
     int j = 4;
     for (int i = 3; i < 10; i++) {
         if (!griever[i].active) {
             griever[i].x = rand() % (MAPTWOWIDTH - 16);
-            griever[i].y = rand() % ((MAPTWOHEIGHT - 16)/2);
+            griever[i].y = rand() % ((MAPTWOHEIGHT - 16)/2); //temporary overflow fix
             griever[i].xVel = 1;
             griever[i].yVel = 1;
             griever[i].width = 16;
@@ -128,6 +136,7 @@ void initNewGriever() {
     }
 }
 
+//initialize spear sprite
 void initSpear() {
     spear.x = dylan.x;
     spear.y = dylan.y;
@@ -142,7 +151,9 @@ void initSpear() {
     launchSpearBool = 0;
 }
 
+//initialize three hidden hearts in level one
 void initHearts() {
+    //hard coded locations of the three
     heart[0].x = 176;
     heart[0].y = 45;
 
@@ -171,6 +182,7 @@ void initHearts() {
     }
 }
 
+//initialize timer sprites ("TIME LEFT: 0:00")
 void initTimer() {
     // Letter T
     letters[1].width = 8;

@@ -1,4 +1,4 @@
-
+//bone game header file inclusions
 #include "gba.h"
 #include "sprites.h"
 #include "game.h"
@@ -8,11 +8,13 @@
 #include "shotSound.h"
 #include "bonusMazeCollision.h"
 
+//colorAt function for collision map
 inline unsigned char colorAt(int x, int y){
     return ((unsigned char *) bonusMazeCollisionBitmap) [OFFSET(x, y, 512)];
 
 }
 
+//update bonus game level functions
 void updateGameBonus() {
     updateDylanBonus();
     updateGrieversBonus();

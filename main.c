@@ -188,8 +188,11 @@ void initialize() {
 
     //set display control register and background control registers
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
+    //Background 0 used for start, instruction, win, lose, pause, view map states, and cut scene states
     REG_BG0CNT = BG_CHARBLOCK(0) | BG_SCREENBLOCK(14) | BG_SIZE_SMALL | BG_4BPP | 0;
+    //Baackground 1 only used during game play for maze backgrounds
     REG_BG1CNT = BG_CHARBLOCK(2) | BG_SCREENBLOCK(10) | BG_SIZE_LARGE | BG_4BPP;
+    //Background 2 used only during pause state for parallax movement
     REG_BG2CNT = BG_CHARBLOCK(3) | BG_SCREENBLOCK(8) | BG_SIZE_SMALL | BG_4BPP | 1;
 
     //set up sound functions
@@ -203,8 +206,8 @@ void initialize() {
 //state functions
 void start() {
     waitForVBlank();
-    flipPage();
 
+    //button controls in satrt state
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
         goToInstructions();
     }
@@ -216,6 +219,7 @@ void start() {
     
 }
 void goToStart() {
+    //set up start states
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
     DMANow(3, &startScreenTiles, &CHARBLOCK[0], startScreenTilesLen/2);
     DMANow(3, &startScreenMap, &SCREENBLOCK[14], startScreenMapLen/2);
@@ -223,6 +227,7 @@ void goToStart() {
 
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
+    
 
     state = START;
 }
@@ -231,10 +236,9 @@ void instructions() {
     waitForVBlank();
 
     if (BUTTON_PRESSED(BUTTON_START)) {
-        // initGame();
+        initGame();
         playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
-        // goToGameOne();
-        goToBonusCutscene();
+        goToGameOne();
     }
 }
 void goToInstructions() {
@@ -243,7 +247,6 @@ void goToInstructions() {
     DMANow(3, &instructScreenMap, &SCREENBLOCK[14], instructScreenMapLen/2);
     DMANow(3, &instructScreenPal, BG_PALETTE, instructScreenPalLen/2);
 
-    hideSprites();
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
     
@@ -262,7 +265,6 @@ void gameOne() {
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
         pauseSounds();
         goToPause();
-        // winGame = 1; //used for testing
     }
 
     if (BUTTON_PRESSED(BUTTON_B)) {
@@ -324,7 +326,6 @@ void goToViewMapOne() {
 void cutsceneOne() {
     waitForVBlank();
 
-    // SCREENBLOCK[14].tilemap[OFFSET(1, 1, 32)] = TILEMAP_ENTRY_TILEID(2);
     volatile unsigned char dialogue[] = "YOU MADE IT BACK IN TIME!     BUT... EVERYONE IS STILL      STUCK IN THE GLADE   VENTURE  BACK INTO THE MAZE TO FIND    ANOTHER WAY TO ESCAPE!        PRESS START TO BEGIN LEVEL    TWO!";
     drawDialogue(dialogue);
 
@@ -363,7 +364,6 @@ void gameTwo() {
     REG_BG1HOFF = hOff;
     REG_BG1VOFF = vOff;
 
-    // hideSprites();
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
@@ -532,12 +532,14 @@ void goToViewMapThree() {
 void pause() {
     hOffStart += 1;
     updatePauseSprites();
+    drawPauseSprites();
+
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
     REG_BG2HOFF = hOffStart;
-    drawPauseSprites();
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
+        unpauseSounds();
         if (level == 1) {
             goToGameOne();
         } else if (level == 2) {
@@ -574,8 +576,9 @@ void goToPause() {
 
     state = PAUSE;
 }
+//initializes sprites used during pause state (letters & dylan)
 void initPauseSprites() {
-    dylanPause.x = 135;
+    dylanPause.x = 112;
     dylanPause.y = 116;
     dylanPause.xVel = 0;
     dylanPause.yVel = 0;
@@ -591,59 +594,44 @@ void initPauseSprites() {
     dylanPause.hide = 0;
     dylanPause.oamIndex = 0;
 
-    grieverPause.x = 80;
-    grieverPause.y = 116;
-    grieverPause.xVel = 0;
-    grieverPause.yVel = 0;
-    grieverPause.width = 16;
-    grieverPause.height = 16;
-    grieverPause.timeUntilNextFrame = 4;
-    grieverPause.direction = RIGHT;
-    grieverPause.isAnimating = 1;
-    grieverPause.currentFrame = 0;
-    grieverPause.numFrames = 4;
-    grieverPause.active = 1;
-    grieverPause.erased = 0;
-    grieverPause.hide = 0;
-    grieverPause.oamIndex = 1;
-
     //PAUSED
     letters[15].width = 8;
     letters[15].height = 8;
     letters[15].active = 1;
     letters[15].hide = 0;
-    letters[15].oamIndex = 2;
+    letters[15].oamIndex = 1;
 
     letters[16].width = 8;
     letters[16].height = 8;
     letters[16].active = 1;
     letters[16].hide = 0;
-    letters[16].oamIndex = 3;
+    letters[16].oamIndex = 2;
 
     letters[17].width = 8;
     letters[17].height = 8;
     letters[17].active = 1;
     letters[17].hide = 0;
-    letters[17].oamIndex = 4;
+    letters[17].oamIndex = 3;
 
     letters[18].width = 8;
     letters[18].height = 8;
     letters[18].active = 1;
     letters[18].hide = 0;
-    letters[18].oamIndex = 5;
+    letters[18].oamIndex = 4;
 
     letters[19].width = 8;
     letters[19].height = 8;
     letters[19].active = 1;
     letters[19].hide = 0;
-    letters[19].oamIndex = 6;
+    letters[19].oamIndex = 5;
 
     letters[20].width = 8;
     letters[20].height = 8;
     letters[20].active = 1;
     letters[20].hide = 0;
-    letters[20].oamIndex = 7;
+    letters[20].oamIndex = 6;
 }
+//animatesdylan sprite during pause state
 void updatePauseSprites() {
     if (dylanPause.isAnimating == 1) {
         dylanPause.timeUntilNextFrame--;
@@ -655,18 +643,8 @@ void updatePauseSprites() {
         dylanPause.currentFrame = 0;
         dylanPause.timeUntilNextFrame = 4;
     }
-
-    if (grieverPause.isAnimating == 1) {
-        grieverPause.timeUntilNextFrame--;
-        if(grieverPause.timeUntilNextFrame == 0) {
-            grieverPause.currentFrame = (grieverPause.currentFrame + 1) % grieverPause.numFrames;
-            grieverPause.timeUntilNextFrame = 4;
-        }
-    } else {
-        grieverPause.currentFrame = 0;
-        grieverPause.timeUntilNextFrame = 4;
-    }
 }
+//draws the letters and dylan sprite during pause state
 void drawPauseSprites() {
     shadowOAM[dylanPause.oamIndex].attr0 = ATTR0_Y(dylanPause.y) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
     shadowOAM[dylanPause.oamIndex].attr1 = ATTR1_X(dylanPause.x) | ATTR1_SMALL;
@@ -676,41 +654,33 @@ void drawPauseSprites() {
         shadowOAM[dylanPause.oamIndex].attr1 = ATTR1_HFLIP | ATTR1_X(dylanPause.x) | ATTR1_SMALL;
     }
 
-    shadowOAM[grieverPause.oamIndex].attr0 = ATTR0_Y(grieverPause.y) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[grieverPause.oamIndex].attr1 = ATTR1_X(grieverPause.x) | ATTR1_SMALL;
-    shadowOAM[grieverPause.oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(grieverPause.currentFrame*2, 6);
-
-    if (grieverPause.direction == RIGHT) {
-        shadowOAM[grieverPause.oamIndex].attr1 = ATTR1_X(grieverPause.x) | ATTR1_SMALL | ATTR1_HFLIP;
-    }
-
-    for (int i = 8; i < 128; i++) {
+    for (int i = 7; i < 128; i++) {
         shadowOAM[i].attr0 = ATTR0_HIDE;
     }
 
-    //PAUSED
+    //PAUSED Letter Sprites
     shadowOAM[letters[15].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[15].oamIndex].attr1 = ATTR1_X(80) | ATTR1_TINY;
+    shadowOAM[letters[15].oamIndex].attr1 = ATTR1_X(96) | ATTR1_TINY;
     shadowOAM[letters[15].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(23, 0);
 
     shadowOAM[letters[16].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[16].oamIndex].attr1 = ATTR1_X(88) | ATTR1_TINY;
+    shadowOAM[letters[16].oamIndex].attr1 = ATTR1_X(104) | ATTR1_TINY;
     shadowOAM[letters[16].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(8, 0);
 
     shadowOAM[letters[17].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[17].oamIndex].attr1 = ATTR1_X(96) | ATTR1_TINY;
+    shadowOAM[letters[17].oamIndex].attr1 = ATTR1_X(112) | ATTR1_TINY;
     shadowOAM[letters[17].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(28, 0);
 
     shadowOAM[letters[18].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[18].oamIndex].attr1 = ATTR1_X(104) | ATTR1_TINY;
+    shadowOAM[letters[18].oamIndex].attr1 = ATTR1_X(120) | ATTR1_TINY;
     shadowOAM[letters[18].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(26, 0);
 
     shadowOAM[letters[19].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[19].oamIndex].attr1 = ATTR1_X(112) | ATTR1_TINY;
+    shadowOAM[letters[19].oamIndex].attr1 = ATTR1_X(128) | ATTR1_TINY;
     shadowOAM[letters[19].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(12, 0);
 
     shadowOAM[letters[20].oamIndex].attr0 = ATTR0_Y(60) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
-    shadowOAM[letters[20].oamIndex].attr1 = ATTR1_X(120) | ATTR1_TINY;
+    shadowOAM[letters[20].oamIndex].attr1 = ATTR1_X(136) | ATTR1_TINY;
     shadowOAM[letters[20].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY (0) | ATTR2_TILEID(11, 0);
 }
 

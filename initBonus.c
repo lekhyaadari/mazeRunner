@@ -1,9 +1,11 @@
+//header file inclusions
 #include "gba.h"
 #include "sprites.h"
 #include "game.h"
 #include "mode0.h"
 #include "spritesheet.h"
 
+//initialize bonus game
 void initGameBonus() {
     hideSprites();
     hOff = 0;
@@ -19,6 +21,7 @@ void initGameBonus() {
     deInitSprites();
 }
 
+//initialize dylan sprite values
 void initDylanBonus() {
     dylan.x = 240;
     dylan.y = 250;
@@ -37,6 +40,7 @@ void initDylanBonus() {
     dylan.oamIndex = 0;
 }
 
+//initializze griever sprites
 void initGrieversBonus() {
     int j = 1;
     for (int i = 0; i < 14; i++) {
@@ -59,6 +63,7 @@ void initGrieversBonus() {
     }
 }
 
+//initialize spear sprite
 void initSpearBonus() {
     spear.x = dylan.x;
     spear.y = dylan.y;
@@ -73,6 +78,7 @@ void initSpearBonus() {
     launchSpearBool = 0;
 }
 
+//hides left over sprites
 void deInitSprites() {
     int k = 21;
     for (int i = 0; i < 15; i++) {
