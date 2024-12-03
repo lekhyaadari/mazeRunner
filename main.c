@@ -165,9 +165,9 @@ void initialize() {
 
     //set display control register and background control registers
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
-    REG_BG0CNT = BG_CHARBLOCK(0) | BG_SCREENBLOCK(14) | BG_SIZE_SMALL | BG_4BPP | 1;
+    REG_BG0CNT = BG_CHARBLOCK(0) | BG_SCREENBLOCK(14) | BG_SIZE_SMALL | BG_4BPP | 0;
     REG_BG1CNT = BG_CHARBLOCK(2) | BG_SCREENBLOCK(10) | BG_SIZE_LARGE | BG_4BPP;
-    REG_BG2CNT = BG_CHARBLOCK(3) | BG_SCREENBLOCK(8) | BG_SIZE_SMALL | BG_4BPP | 0;
+    REG_BG2CNT = BG_CHARBLOCK(3) | BG_SCREENBLOCK(8) | BG_SIZE_SMALL | BG_4BPP | 1;
 
     //set up sound functions
     setupSounds();
@@ -285,9 +285,9 @@ void viewMapOne() {
 
 }
 void goToViewMapOne() {
-    REG_DISPCTL = MODE(0) | BG_ENABLE(2);
-    DMANow(3, &ViewMapOneTiles, &CHARBLOCK[3], ViewMapOneTilesLen/2);
-    DMANow(3, &ViewMapOneMap, &SCREENBLOCK[8], ViewMapOneMapLen/2);
+    REG_DISPCTL = MODE(0) | BG_ENABLE(0);
+    DMANow(3, &ViewMapOneTiles, &CHARBLOCK[0], ViewMapOneTilesLen/2);
+    DMANow(3, &ViewMapOneMap, &SCREENBLOCK[14], ViewMapOneMapLen/2);
     DMANow(3, &ViewMapOnePal, BG_PALETTE, ViewMapOnePalLen/2);
 
     hideSprites();
@@ -314,12 +314,6 @@ void cutsceneOne() {
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
         currentIndex = 0;
         goToStart();
-    }
-
-    if (BUTTON_PRESSED(BUTTON_RSHOULDER)) {
-        currentIndex = 0;
-        stopSounds();
-        goToWin(); //just used for testing, won't be part of final submission
     }
 }
 void goToCutsceneOne() {
@@ -352,10 +346,8 @@ void gameTwo() {
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
         pauseSounds();
         goToPause();
-        // winGame = 1; //used for testing
     }
 
-    //TODO add timer for this
     if (BUTTON_PRESSED(BUTTON_B)) {
         pauseSounds();
         goToViewMapTwo();
@@ -384,7 +376,6 @@ void goToGameTwo() {
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
-    // initGameTwo();
     state = GAMETWO;
 }
 
@@ -398,15 +389,11 @@ void viewMapTwo() {
     } else {
         viewTimer--;
     }
-
-    // if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
-    //     goToGameTwo();
-    // }
 }
 void goToViewMapTwo() {
-    REG_DISPCTL = MODE(0) | BG_ENABLE(2);
-    DMANow(3, &ViewMapTwoTiles, &CHARBLOCK[3], ViewMapTwoTilesLen/2);
-    DMANow(3, &ViewMapTwoMap, &SCREENBLOCK[8], ViewMapTwoMapLen/2);
+    REG_DISPCTL = MODE(0) | BG_ENABLE(0);
+    DMANow(3, &ViewMapTwoTiles, &CHARBLOCK[0], ViewMapTwoTilesLen/2);
+    DMANow(3, &ViewMapTwoMap, &SCREENBLOCK[14], ViewMapTwoMapLen/2);
     DMANow(3, &ViewMapTwoPal, BG_PALETTE, ViewMapTwoPalLen/2);
 
     hideSprites();
@@ -419,7 +406,6 @@ void goToViewMapTwo() {
 void cutsceneTwo() {
     waitForVBlank();
 
-    // SCREENBLOCK[14].tilemap[OFFSET(1, 1, 32)] = TILEMAP_ENTRY_TILEID(2);
     volatile unsigned char dialogue[] = "STILL NO LUCK ESCAPING. AND   YOU MISSED A NEW ARRIVAL AT   THE GLADE! SHE EVEN BROUGHT   ANTI VENOM TO USE FOR YOUR    LAST TRY.    PRESS THE LEFT   SHOULDER BUTTON TO INJECT.    THIS WILL PROTECT YOU FROM A  SINGLE COLLISION WITH A       GRIEVER! PRESS START TO BEGIN LEVEL THREE. GOOD LUCK!";
     drawDialogue(dialogue);
 
@@ -431,11 +417,6 @@ void cutsceneTwo() {
 
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
         goToStart();
-    }
-
-    if (BUTTON_PRESSED(BUTTON_RSHOULDER)) {
-        stopSounds();
-        goToWin(); //just used for testing, won't be part of final submission
     }
 }
 void goToCutsceneTwo() {
@@ -469,10 +450,8 @@ void gameThree() {
     if (BUTTON_PRESSED(BUTTON_SELECT)) {
         pauseSounds();
         goToPause();
-        // winGame = 1; //used for testing
     }
 
-    //TODO add timer for this
     if (BUTTON_PRESSED(BUTTON_B)) {
         pauseSounds();
         goToViewMapThree();
@@ -500,7 +479,6 @@ void goToGameThree() {
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
-    // initGameThree();
     state = GAMETHREE;
 }
 
@@ -516,9 +494,9 @@ void viewMapThree() {
     }
 }
 void goToViewMapThree() {
-    REG_DISPCTL = MODE(0) | BG_ENABLE(2);
-    DMANow(3, &ViewMapThreeTiles, &CHARBLOCK[3], ViewMapThreeTilesLen/2);
-    DMANow(3, &ViewMapThreeMap, &SCREENBLOCK[8], ViewMapThreeMapLen/2);
+    REG_DISPCTL = MODE(0) | BG_ENABLE(0);
+    DMANow(3, &ViewMapThreeTiles, &CHARBLOCK[0], ViewMapThreeTilesLen/2);
+    DMANow(3, &ViewMapThreeMap, &SCREENBLOCK[14], ViewMapThreeMapLen/2);
     DMANow(3, &ViewMapThreePal, BG_PALETTE, ViewMapThreePalLen/2);
 
     hideSprites();
@@ -553,7 +531,6 @@ void goToPause() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(0) | BG_ENABLE(2) | SPRITE_ENABLE;
     DMANow(3, &pauseScreenTiles, &CHARBLOCK[0], pauseScreenTilesLen/2);
     DMANow(3, &pauseScreenMap, &SCREENBLOCK[14], pauseScreenMapLen/2);
-    // DMANow(3, &pauseScreenPal, BG_PALETTE, pauseScreenPalLen/2);
 
     DMANow(3, &pauseParallaxTiles, &CHARBLOCK[3], pauseParallaxTilesLen/2);
     DMANow(3, &pauseParallaxMap, &SCREENBLOCK[8], pauseParallaxMapLen/2);
@@ -564,14 +541,12 @@ void goToPause() {
 
     initPauseSprites();
 
-    // hideSprites();
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
     hOffStart = 0;
     vOffStart = 0;
 
-    // pauseSounds();
     state = PAUSE;
 }
 void initPauseSprites() {
@@ -759,7 +734,6 @@ void goToLose() {
 //animate dialogue / words in the cutscene using tilemap modification
 void drawDialogue(volatile unsigned char* dialogue) {
     int frameCounter = 0;
-    //currentIndex = 0;
 
     if (timeUntilNextLetter == 0) {
         if (dialogue[currentIndex] != '\0') {
