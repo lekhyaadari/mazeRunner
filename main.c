@@ -64,7 +64,9 @@ enum {
     GAMETHREE,
     VIEWTHREE,
     WIN,
-    LOSE
+    LOSE,
+    CUTSCENEBONUS,
+    GAMEBONUS
 } state;
 
 //Function Prototypes
@@ -166,6 +168,12 @@ int main() {
                 break;
             case LOSE:
                 lose();
+                break;
+            case CUTSCENEBONUS:
+                bonusCutscene();
+                break;
+            case GAMEBONUS:
+                bonusGameO();
                 break;
         }
     }
@@ -455,7 +463,6 @@ void gameThree() {
     REG_BG1HOFF = hOff;
     REG_BG1VOFF = vOff;
 
-    // hideSprites();
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
@@ -533,6 +540,8 @@ void pause() {
             goToGameTwo();
         } else if (level == 3) {
             goToGameThree();
+        } else if (level == 4) {
+            goToBonusGame();
         }
     }
     if (BUTTON_PRESSED(BUTTON_START)) {
@@ -707,6 +716,10 @@ void win() {
     if (BUTTON_PRESSED(BUTTON_START)){
         goToStart();
     }
+
+    if (BUTTON_PRESSED(BUTTON_RSHOULDER)) {
+        goToBonusCutscene();
+    }
 }
 void goToWin() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
@@ -744,17 +757,77 @@ void goToLose() {
 }
 
 void bonusCutscene() {
+    waitForVBlank();
 
+    volatile unsigned char dialogue[] = "";
+    drawDialogue(dialogue);
+
+    if (BUTTON_PRESSED(BUTTON_START)) {
+        initGameBonus();
+        playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
+        goToBonusGame();
+    }
+
+    if (BUTTON_PRESSED(BUTTON_SELECT)) {
+        goToStart();
+    }
 }
 void goToBonusCutscene() {
+    REG_DISPCTL = MODE(0) | BG_ENABLE(0);
+    DMANow(3, &cutscenesTilesTiles, &CHARBLOCK[0], cutscenesTilesTilesLen/2);
+    DMANow(3, &cutscenesMap, &SCREENBLOCK[14], cutscenesLen/2);
+    DMANow(3, &cutscenesTilesPal, BG_PALETTE, cutscenesTilesPalLen/2);
 
+    hideSprites();
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    winGame = 0;
+    loseGame = 0;
+    heartActive = 0;
+    currentIndex = 0;
+
+    state = CUTSCENEBONUS;
 }
 
 void bonusGame() {
+    updateGameBonus();
+    drawGame();
+    REG_BG1HOFF = hOff;
+    REG_BG1VOFF = vOff;
 
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    if (BUTTON_PRESSED(BUTTON_SELECT)) {
+        pauseSounds();
+        goToPause();
+    }
+
+    if (winGame == 1) {
+        stopSounds();
+        goToWin();
+    }
+    if (loseGame == 1) {
+        stopSounds();
+        goToLose();
+    }
 }
 void goToBonusGame() {
-    
+    REG_DISPCTL = MODE(0) | BG_ENABLE(1) | SPRITE_ENABLE;
+    DMANow(3, &mazeBackgroundTiles, &CHARBLOCK[2], mazeBackgroundTilesLen/2);
+    //TODO make bonus level map
+    // DMANow(3, &mazeThreeMap, &SCREENBLOCK[10], mazeThreeLen/2);
+    DMANow(3, &mazeBackgroundPal, BG_PALETTE, mazeBackgroundPalLen/2);
+
+    DMANow(3, spritesheetTiles, &CHARBLOCK[4], spritesheetTilesLen/2);
+    DMANow(3, spritesheetPal, SPRITE_PAL, spritesheetPalLen/2);
+
+    hideSprites();
+    waitForVBlank();
+    DMANow(3, shadowOAM, OAM, 128*4);
+
+    state = GAMEBONUS;
 }
 
 //animate dialogue / words in the cutscene using tilemap modification

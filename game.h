@@ -82,15 +82,18 @@ void updateDylanThree();
 void updateGrieversThree();
 void updateHeartsThree();
 void updateLettersThree();
+void launchSpearThree();
 
 //Hidden Level
-void initBonus();
+void initGameBonus();
 void initDylanBonus();
 void initGrieversBonus();
 void initSpearBonus();
 void updateGameBonus();
 void updateDylanBonus();
 void updateGrieversBonus();
+void updateSpearBonus();
+void launchSpearBonus();
 
 // Letters
 // A - 0, B - 1, C - 2, D - 3, E - 4, F - 5, G - 6, H - 7, I - 8, J - 9, K - 10
