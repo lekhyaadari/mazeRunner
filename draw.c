@@ -31,7 +31,7 @@ void drawDylan() {
             shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 4);
         }
 
-        if (heartActive) {
+        if (heartActive == 1) {
             shadowOAM[dylan.oamIndex].attr0 = ATTR0_Y(dylan.y - vOff) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
             shadowOAM[dylan.oamIndex].attr1 = ATTR1_X(dylan.x - hOff) | ATTR1_SMALL;
             shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(1) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 0);
@@ -45,7 +45,7 @@ void drawDylan() {
                 shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(1) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 4);
             }
         }
-        if (venomActive) {
+        if (venomActive == 1) {
             shadowOAM[dylan.oamIndex].attr0 = ATTR0_Y(dylan.y - vOff) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
             shadowOAM[dylan.oamIndex].attr1 = ATTR1_X(dylan.x - hOff) | ATTR1_SMALL;
             shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(2) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 0);
@@ -53,10 +53,10 @@ void drawDylan() {
                 shadowOAM[dylan.oamIndex].attr1 = ATTR1_HFLIP | ATTR1_X(dylan.x - hOff) | ATTR1_SMALL;
             }
             if (dylan.direction == UP) {
-                shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(1) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 2);
+                shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(2) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 2);
             }
             if (dylan.direction == DOWN) {
-                shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(1) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 4);
+                shadowOAM[dylan.oamIndex].attr2 = ATTR2_PALROW(2) | ATTR2_PRIORITY(0) | ATTR2_TILEID(dylan.currentFrame*2, 4);
             }
         }
     }
@@ -64,7 +64,7 @@ void drawDylan() {
 
 void drawGriever() {
     for (int i = 0; i < 10; i++) {
-        if (griever[i].active && !griever[i].erased && !griever[i].hide && (collision(griever[i].x, griever[i].y, griever[i].width, griever[i].height, hOff, vOff, SCREENWIDTH, SCREENHEIGHT))) {
+        if (griever[i].active && !griever[i].erased && !griever[i].hide && (collision(griever[i].x, griever[i].y, griever[i].width, griever[i].height, hOff, vOff, SCREENWIDTH, SCREENHEIGHT)) && (heartActive == 0 || heartActive == 1)) {
             shadowOAM[griever[i].oamIndex].attr0 = ATTR0_Y(griever[i].y - vOff) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_SQUARE;
             shadowOAM[griever[i].oamIndex].attr1 = ATTR1_X(griever[i].x - hOff) | ATTR1_SMALL;
             shadowOAM[griever[i].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(griever[i].currentFrame*2, 6);
@@ -83,8 +83,6 @@ void drawGriever() {
         }
     }
 }
-
-//!collision(sprite.x, y, width, height, hoff, voff, screenwi, screenhe)
 
 void drawSpear() {
     if (spear.hide) {
@@ -114,7 +112,7 @@ void drawHearts() {
     for (int i = 0; i < 3; i++) {
         if (heart[i].hide && !heart[i].active) {
             shadowOAM[heart[i].oamIndex].attr0 |= ATTR0_HIDE;
-        } else if (heart[i].active && !heart[i].hide && collision(heart[i].x, heart[i].y, heart[i].width, heart[i].height, hOff, vOff, SCREENWIDTH, SCREENHEIGHT)) {
+        } else if ((heart[i].active == 1 || heartActive == 2) && !heart[i].hide && collision(heart[i].x, heart[i].y, heart[i].width, heart[i].height, hOff, vOff, SCREENWIDTH, SCREENHEIGHT)) {
             shadowOAM[heart[i].oamIndex].attr0 = ATTR0_Y(heart[i].y - vOff) | ATTR0_REGULAR | ATTR0_4BPP | ATTR0_WIDE;
             shadowOAM[heart[i].oamIndex].attr1 = ATTR1_X(heart[i].x - hOff) | ATTR1_TINY;
             shadowOAM[heart[i].oamIndex].attr2 = ATTR2_PALROW(0) | ATTR2_PRIORITY(0) | ATTR2_TILEID(0, 12);

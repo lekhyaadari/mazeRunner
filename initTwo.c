@@ -93,14 +93,14 @@ void initGrieversTwo() {
     griever[2].oamIndex = 3;
 
     //griever 4
-    griever[3].x = 107;
+    griever[3].x = 106;
     griever[3].y = 235;
     griever[3].xVel = 1;
     griever[3].yVel = 1;
     griever[3].width = 16;
     griever[3].height = 16;
     griever[3].timeUntilNextFrame = 6;
-    griever[3].direction = RIGHT;
+    griever[3].direction = UP;
     griever[3].isAnimating = 0;
     griever[3].currentFrame = 0;
     griever[3].numFrames = 4;
@@ -111,13 +111,13 @@ void initGrieversTwo() {
 
     //griever 5
     griever[4].x = 108;
-    griever[4].y = 399;
+    griever[4].y = 400;
     griever[4].xVel = 1;
     griever[4].yVel = 1;
     griever[4].width = 16;
     griever[4].height = 16;
     griever[4].timeUntilNextFrame = 6;
-    griever[4].direction = RIGHT;
+    griever[4].direction = UP;
     griever[4].isAnimating = 0;
     griever[4].currentFrame = 0;
     griever[4].numFrames = 4;
@@ -156,6 +156,7 @@ void initNewGrieverTwo() {
             griever[i].hide = 0;
             griever[i].oamIndex = j;
             j++;
+            break;
         }
     }
 }
@@ -175,11 +176,14 @@ void initSpearTwo() {
 }
 
 void initHeartsTwo() {
+    heart[0].x = 265;
+    heart[0].y = 80;
+
+    heart[1].x = 200;
+    heart[1].y = 388;
+
     int j = 16;
     for (int i = 0; i < 2; i++) {
-        heart[i].x = rand() % (MAPTWOWIDTH - 8);
-        heart[i].y = rand() % ((MAPTWOHEIGHT - 8)/2);
-        // TODO: add if checks for if hearts generate in a bush +  move them accordingly
         heart[i].xVel = 0;
         heart[i].yVel = 0;
         heart[i].width = 8;

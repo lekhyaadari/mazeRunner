@@ -33,31 +33,23 @@ void updateDylanTwo() {
 
     if (BUTTON_HELD(BUTTON_RIGHT) && colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) && (dylan.x + dylan.width < 512) && colorAt(rightX + dylan.xVel, topY + 8)) {
         dylan.isAnimating = 1;
-        // if (colorAt(rightX + dylan.xVel, topY) && colorAt(rightX + dylan.xVel, bottomY) ) {
             dylan.x += dylan.xVel;
             dylan.direction = RIGHT;
-        // }
     }
     if (BUTTON_HELD(BUTTON_LEFT) && colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) && (dylan.x > 0) && colorAt(leftX - dylan.xVel, topY + 8)) {
         dylan.isAnimating = 1;
-        // if (colorAt(leftX - dylan.xVel, topY) && colorAt(leftX - dylan.xVel, bottomY) ) {
             dylan.x -= dylan.xVel;
             dylan.direction = LEFT;
-        // }
     }
     if (BUTTON_HELD(BUTTON_UP) && colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) && (dylan.y > 0) && colorAt(leftX + 8, topY - dylan.yVel)) {
         dylan.isAnimating = 1;
-        // if (colorAt(leftX, topY - dylan.yVel) && colorAt(rightX, topY - dylan.yVel) ) {
             dylan.y -= dylan.yVel;
             dylan.direction = UP;
-        // }
     }
     if (BUTTON_HELD(BUTTON_DOWN) && colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) && (dylan.y + dylan.height < 512) && colorAt(leftX + 8, bottomY + dylan.yVel)) {
         dylan.isAnimating = 1;
-        // if (colorAt(leftX, bottomY + dylan.yVel) && colorAt(rightX, bottomY + dylan.yVel) ) {
             dylan.y += dylan.yVel;
             dylan.direction = DOWN;
-        // }
     }
 
     if (dylan.isAnimating == 1) {
@@ -111,31 +103,27 @@ void updateGrieversTwo() {
         }
 
         if (griever[i].active) {
-            griever[i].isAnimating = 0;
+            griever[i].isAnimating = 1;
 
             if (griever[i].direction == RIGHT) {
                 griever[i].x += griever[i].xVel;
                 if ((colorAt(rightX + 1, topY) == 0) && (colorAt(rightX + 1, bottomY) == 0) && (colorAt(rightX + 1, topY + 8) == 0)) {
-                    // griever[i].direction = LEFT;
                     griever[i].direction = rand() % 4;
                 }
             } else if (griever[i].direction == LEFT) {
                 griever[i].x -= griever[i].xVel;
                 if ((colorAt(leftX - 1, topY) == 0) && (colorAt(leftX - 1, bottomY) == 0) && (colorAt(leftX - 1, topY + 8) == 0)) {
-                    // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;
                 }
             }
             if (griever[i].direction == UP) {
                 griever[i].y -= griever[i].yVel;
                 if ((colorAt(leftX, topY - 1) == 0) && (colorAt(rightX, topY - 1) == 0)  && (colorAt(leftX + 8, topY - 1) == 0)) {
-                    // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;
                 }
             } else if (griever[i].direction == DOWN) {
                 griever[i].y += griever[i].yVel;
                 if ((colorAt(leftX, bottomY + 1) == 0) && (colorAt(rightX, bottomY + 1) == 0) && (colorAt(leftX + 8, bottomY + 1) == 0)) {
-                    // griever[i].direction = RIGHT;
                     griever[i].direction = rand() % 4;
                 }
             }
@@ -153,8 +141,7 @@ void updateGrieversTwo() {
             }
         }
 
-        // TODO add timer for this
-        if (heartActive) {
+        if (heartActive == 1 || heartActive == 2) {
             if (BUTTON_PRESSED(BUTTON_RSHOULDER)) {
                 griever[i].x = 0;
                 griever[i].y = 0;
@@ -163,6 +150,7 @@ void updateGrieversTwo() {
                 griever[i].hide = 1;
                 griever[i].xVel = 0;
                 griever[i].yVel = 0;
+                heartActive = 2;
             } else {
                 griever[i].active = 1;
                 griever[i].erased = 0;
@@ -194,6 +182,9 @@ void updateGrieversTwo() {
             griever[i].hide = 1;
             griever[i].xVel = 0;
             griever[i].yVel = 0;
+
+            initNewGrieverTwo();
+            initNewGrieverTwo();
         }
     }
 }
@@ -225,8 +216,6 @@ void updateSpearTwo() {
     } 
 
     spear.direction = dylan.direction;
-    // spear.x = dylan.x + 2;
-    // spear.y = dylan.y + 2;
     if (BUTTON_PRESSED(BUTTON_A)) {
         playSoundB(shotSound_data, shotSound_length, 0);
         launchSpearTwo();
@@ -234,32 +223,24 @@ void updateSpearTwo() {
 }
 
 void launchSpearTwo() {
-    // spear.xVel = 1;
-    // spear.yVel = 1;
-    // if (spear.hide == 1) {
-        spear.hide = 0;
-        spear.direction = dylan.direction;
-        spear.x = dylan.x + 2;
-        spear.y = dylan.y + 2;
+    spear.hide = 0;
+    spear.direction = dylan.direction;
+    spear.x = dylan.x + 2;
+    spear.y = dylan.y + 2;
 
-        if (spear.direction == RIGHT) {
-            // spear.x += spear.xVel;
-            spear.xVel = 1;
-            spear.yVel = 0;
-        } else if (spear.direction == LEFT) {
-            // spear.x -= spear.xVel;
-            spear.xVel = -1;
-            spear.yVel = 0;
-        } else if (spear.direction == DOWN) {
-            // spear.y += spear.yVel;
-            spear.xVel = 0;
-            spear.yVel = 1;
-        } else if (spear.direction == UP) {
-            // spear.y -= spear.yVel;
-            spear.xVel = 0;
-            spear.yVel = -1;
-        }
-    // }
+    if (spear.direction == RIGHT) {
+        spear.xVel = 1;
+        spear.yVel = 0;
+    } else if (spear.direction == LEFT) {
+        spear.xVel = -1;
+        spear.yVel = 0;
+    } else if (spear.direction == DOWN) {
+        spear.xVel = 0;
+        spear.yVel = 1;
+    } else if (spear.direction == UP) {
+        spear.xVel = 0;
+        spear.yVel = -1;
+    }
 }
 
 void updateHeartsTwo() {
@@ -268,6 +249,8 @@ void updateHeartsTwo() {
             heart[i].active = 0;
             heart[i].erased = 1;
             heart[i].hide = 1;
+            heart[i].x = 0;
+            heart[i].y = 0;
             heartActive = 1;
         }
     }

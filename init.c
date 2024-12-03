@@ -43,14 +43,14 @@ void initDylan() {
 
 void initGriever() {
     //griever 1
-    griever[0].x = 180;
-    griever[0].y = 24;
+    griever[0].x = 10;
+    griever[0].y = 80;
     griever[0].xVel = 1;
     griever[0].yVel = 1;
     griever[0].width = 16;
     griever[0].height = 16;
     griever[0].timeUntilNextFrame = 6;
-    griever[0].direction = RIGHT;
+    griever[0].direction = DOWN;
     griever[0].isAnimating = 0;
     griever[0].currentFrame = 0;
     griever[0].numFrames = 4;
@@ -143,11 +143,17 @@ void initSpear() {
 }
 
 void initHearts() {
+    heart[0].x = 176;
+    heart[0].y = 45;
+
+    heart[1].x = 364;
+    heart[1].y = 264;
+
+    heart[2].x = 75;
+    heart[2].y = 352;
+
     int j = 11;
     for (int i = 0; i < 3; i++) {
-        heart[i].x = rand() % (MAPTWOWIDTH - 8);
-        heart[i].y = rand() % ((MAPTWOHEIGHT - 8)/2);
-        // TODO: add if checks for if hearts generate in a bush +  move them accordingly
         heart[i].xVel = 0;
         heart[i].yVel = 0;
         heart[i].width = 10;

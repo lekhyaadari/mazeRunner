@@ -157,6 +157,7 @@ void initNewGrieverThree() {
             griever[i].hide = 0;
             griever[i].oamIndex = j;
             j++;
+            break;
         }
     }
 }
@@ -180,7 +181,6 @@ void initHeartsThree() {
     for (int i = 0; i < 1; i++) {
         heart[i].x = 234;
         heart[i].y = 36;
-        // TODO: add if checks for if hearts generate in a bush +  move them accordingly
         heart[i].xVel = 0;
         heart[i].yVel = 0;
         heart[i].width = 8;

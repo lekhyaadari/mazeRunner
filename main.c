@@ -159,24 +159,25 @@ int main() {
     }
 }
 
+//initialization function
 void initialize() {
     mgba_open();
 
+    //set display control register and background control registers
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
     REG_BG0CNT = BG_CHARBLOCK(0) | BG_SCREENBLOCK(14) | BG_SIZE_SMALL | BG_4BPP | 1;
     REG_BG1CNT = BG_CHARBLOCK(2) | BG_SCREENBLOCK(10) | BG_SIZE_LARGE | BG_4BPP;
     REG_BG2CNT = BG_CHARBLOCK(3) | BG_SCREENBLOCK(8) | BG_SIZE_SMALL | BG_4BPP | 0;
-    REG_BG3CNT = BG_CHARBLOCK(3) | BG_SCREENBLOCK(8) | BG_SIZE_WIDE | BG_4BPP | 0;
 
-    // REG_BG0HOFF = hOff;
-    // REG_BG0VOFF = vOff;
-
+    //set up sound functions
     setupSounds();
     setupSoundInterrupts();
 
+    //go to start state
     goToStart();
 }
 
+//state functions
 void start() {
     waitForVBlank();
     flipPage();
@@ -189,21 +190,15 @@ void start() {
         playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
         goToGameOne();
     }
-    // if(BUTTON_PRESSED(BUTTON_A)) {
-    //     goToCutsceneTwo();
-    // }
     
 }
 void goToStart() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(0);
-    // DMANow(3, mazeStartPal, BG_PALETTE, mazeStartPalLen/2);
-    // drawFullscreenImage4(mazeStartBitmap);
     DMANow(3, &startScreenTiles, &CHARBLOCK[0], startScreenTilesLen/2);
     DMANow(3, &startScreenMap, &SCREENBLOCK[14], startScreenMapLen/2);
     DMANow(3, &startScreenPal, BG_PALETTE, startScreenPalLen/2);
 
     waitForVBlank();
-    // flipPage();
     DMANow(3, shadowOAM, OAM, 128*4);
 
     state = START;
@@ -237,7 +232,6 @@ void gameOne() {
     REG_BG1HOFF = hOff;
     REG_BG1VOFF = vOff;
 
-    // hideSprites();
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
@@ -247,7 +241,6 @@ void gameOne() {
         // winGame = 1; //used for testing
     }
 
-    //TODO add timer for this
     if (BUTTON_PRESSED(BUTTON_B)) {
         pauseSounds();
         goToViewMapOne();
@@ -276,8 +269,6 @@ void goToGameOne() {
     waitForVBlank();
     DMANow(3, shadowOAM, OAM, 128*4);
 
-    // initGame();
-    // playSoundA(mazeRunnerOST_data, mazeRunnerOST_length, 0);
     state = GAMEONE;
 }
 
@@ -292,9 +283,6 @@ void viewMapOne() {
         viewTimer--;
     }
 
-    // if (BUTTON_PRESSED(BUTTON_LSHOULDER)) {
-    //     goToGameOne();
-    // }
 }
 void goToViewMapOne() {
     REG_DISPCTL = MODE(0) | BG_ENABLE(2);
