@@ -29,19 +29,25 @@
 #include "cutscenesTiles.h"
 //Game One (maze one) Header File
 #include "game.h"
+//Background Game Sound
 #include "mazeRunnerOST.h"
 
+//Initialization Function Prototype
 void initialize();
 
+//Timers for cutscenes and view maps
 void drawDialogue(volatile unsigned char* dialogue);
 int getTileIDForChar(char c);
 int timeUntilNextLetter = 5;
 int currentIndex = 0;
 int viewTimer = 120;
+
+//Pause State Function Prototypes
 void initPauseSprites();
 void updatePauseSprites();
 void drawPauseSprites();
 
+//Declare shadowOAM
 OBJ_ATTR shadowOAM[128];
 
 //State Enum
@@ -86,22 +92,28 @@ void pause();
 void goToPause();
 void win();
 void goToWin();
+void bonusCutscene();
+void goToBonusCutscene();
+void bonusGame();
+void goToBonusGame();
 
-//button variables
+//Button Variables
 unsigned short buttons;
 unsigned short oldButtons;
 
-//surrogate variables
+//Surrogate Variables
 int hOff;
 int vOff;
 int hOffStart;
 int vOffStart;
 
-//win and lose game
+//Win and Lose Game Variables
 int winGame;
 int loseGame;
+//Level Tracker Variable
 int level;
 
+//Main Function
 int main() {
     
     initialize();
@@ -159,7 +171,7 @@ int main() {
     }
 }
 
-//initialization function
+//Initialization Function
 void initialize() {
     mgba_open();
 
@@ -729,6 +741,20 @@ void goToLose() {
 
     loseGame = 0;
     state = LOSE;
+}
+
+void bonusCutscene() {
+
+}
+void goToBonusCutscene() {
+
+}
+
+void bonusGame() {
+
+}
+void goToBonusGame() {
+    
 }
 
 //animate dialogue / words in the cutscene using tilemap modification
